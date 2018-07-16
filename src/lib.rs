@@ -6,7 +6,9 @@ use std::error::Error;
 use std::fs::File;
 use url::Url;
 
-fn download_image(url: &Url) -> Result<String, Box<Error>> {
+type Result<T> = std::result::Result<T, Box<Error>>;
+
+fn download_image(url: &Url) -> Result<String> {
     let cache_dir = dirs::cache_dir().ok_or("no cache dir")?;
     let segments = url.path_segments().ok_or("no path segments")?;
     let mut file_name = segments.last().ok_or("no file name")?;
