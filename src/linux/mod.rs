@@ -2,18 +2,18 @@ use std::env;
 use std::process::Command;
 use Result;
 
-/// Returns the wallpaper of the current desktop environment.
+/// Returns the wallpaper of the current desktop.
 pub fn get() -> Result<String> {
-    let de = env::var("XDG_CURRENT_DESKTOP")?;
+    let desktop = env::var("XDG_CURRENT_DESKTOP")?;
 
-    if is_gnome_compliant(&de) {
+    if is_gnome_compliant(&desktop) {
         return parse_dconf(
             "gsettings",
             &["get", "org.gnome.desktop.background", "picture-uri"],
         );
     }
 
-    match de.as_str() {
+    match desktop.as_str() {
         "KDE" => Err("TODO".into()),
         "X-Cinnamon" => parse_dconf(
             "dconf",
@@ -32,13 +32,13 @@ pub fn get() -> Result<String> {
                 "/com/deepin/wrap/gnome/desktop/background/picture-uri",
             ],
         ),
-        _ => Err("unsupported desktop environment".into()),
+        _ => Err("unsupported desktop".into()),
     }
 }
 
 #[inline]
-fn is_gnome_compliant(de: &str) -> bool {
-    de.contains("GNOME") || de == "Unity" || de == "Pantheon"
+fn is_gnome_compliant(desktop: &str) -> bool {
+    desktop.contains("GNOME") || desktop == "Unity" || desktop == "Pantheon"
 }
 
 fn parse_dconf(command: &str, args: &[&str]) -> Result<String> {
