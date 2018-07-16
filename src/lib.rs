@@ -2,6 +2,11 @@ extern crate dirs;
 extern crate reqwest;
 extern crate url;
 
+#[cfg(target_os = "linux")]
+pub mod linux;
+#[cfg(target_os = "linux")]
+pub use linux::*;
+
 use std::error::Error;
 use std::fs::File;
 use url::Url;
