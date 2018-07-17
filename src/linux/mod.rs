@@ -1,5 +1,5 @@
 use download_image;
-use enquote::enquote;
+use enquote;
 use std::env;
 use std::process::Command;
 use Result;
@@ -43,7 +43,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
     let desktop = env::var("XDG_CURRENT_DESKTOP")?;
 
     if is_gnome_compliant(&desktop) {
-        let uri = enquote('"', &format!("file://{}", path));
+        let uri = enquote::enquote('"', &format!("file://{}", path));
         Command::new("gsettings")
             .args(&["set", "org.gnome.desktop.background", "picture-uri", &uri])
             .output()?;
@@ -57,7 +57,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
             &[
                 "write",
                 "/org/cinnamon/desktop/background/picture-uri",
-                &enquote('"', &format!("file://{}", path)),
+                &enquote::enquote('"', &format!("file://{}", path)),
             ],
         ),
         "MATE" => run(
@@ -65,7 +65,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
             &[
                 "write",
                 "/org/mate/desktop/background/picture-filename",
-                &enquote('"', &path),
+                &enquote::enquote('"', &path),
             ],
         ),
         "XFCE" => run(
@@ -85,7 +85,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
             &[
                 "write",
                 "/com/deepin/wrap/gnome/desktop/background/picture-uri",
-                &enquote('"', &format!("file://{}", path)),
+                &enquote::enquote('"', &format!("file://{}", path)),
             ],
         ),
         "i3" => run("feh", &["--bg-fill", &path]),
@@ -105,7 +105,7 @@ pub fn set_from_url(url: &str) -> Result<()> {
                 "set",
                 "org.gnome.desktop.background",
                 "picture-uri",
-                &enquote('"', url),
+                &enquote::enquote('"', url),
             ],
         ),
         "i3" => run("feh", &["--bg-fill", url]),
@@ -131,12 +131,7 @@ fn parse_dconf(command: &str, args: &[&str]) -> Result<String> {
         ).into());
     }
 
-    let mut stdout = String::from_utf8(output.stdout)?.trim().to_owned();
-
-    // unquotes single quotes
-    stdout.remove(0);
-    stdout.pop();
-    stdout = stdout.replace("\\'", "'");
+    let mut stdout = enquote::unquote(&String::from_utf8(output.stdout)?.trim().to_owned())?;
 
     // removes file protocol
     if stdout.starts_with("file://") {
