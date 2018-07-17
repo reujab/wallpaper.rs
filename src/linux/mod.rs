@@ -1,3 +1,4 @@
+use enquote::enquote;
 use std::env;
 use std::process::Command;
 use Result;
@@ -36,6 +37,61 @@ pub fn get() -> Result<String> {
     }
 }
 
+/// Sets the wallpaper for the current desktop from a file path.
+pub fn set_from_path(path: &str) -> Result<()> {
+    let desktop = env::var("XDG_CURRENT_DESKTOP")?;
+
+    if is_gnome_compliant(&desktop) {
+        let uri = enquote('"', &format!("file://{}", path));
+        Command::new("gsettings")
+            .args(&["set", "org.gnome.desktop.background", "picture-uri", &uri])
+            .output()?;
+        return Ok(());
+    }
+
+    match desktop.as_str() {
+        "KDE" => Err("TODO".into()),
+        "X-Cinnamon" => run(
+            "dconf",
+            &[
+                "write",
+                "/org/cinnamon/desktop/background/picture-uri",
+                &enquote('"', &format!("file://{}", path)),
+            ],
+        ),
+        "MATE" => run(
+            "dconf",
+            &[
+                "write",
+                "/org/mate/desktop/background/picture-filename",
+                &enquote('"', &path),
+            ],
+        ),
+        "XFCE" => run(
+            "xfconf-query",
+            &[
+                "-c",
+                "xfce4-desktop",
+                "-p",
+                "/backdrop/screen0/monitor0/workspace0/last-image",
+                "-s",
+                &path,
+            ],
+        ),
+        "LXDE" => run("pcmanfm", &["-w", &path]),
+        "Deepin" => run(
+            "dconf",
+            &[
+                "write",
+                "/com/deepin/wrap/gnome/desktop/background/picture-uri",
+                &enquote('"', &format!("file://{}", path)),
+            ],
+        ),
+        "i3" => run("feh", &["--bg-fill", &path]),
+        _ => Err("unsupported desktop".into()),
+    }
+}
+
 #[inline]
 fn is_gnome_compliant(desktop: &str) -> bool {
     desktop.contains("GNOME") || desktop == "Unity" || desktop == "Pantheon"
@@ -64,4 +120,17 @@ fn parse_dconf(command: &str, args: &[&str]) -> Result<String> {
     }
 
     Ok(stdout)
+}
+
+fn run(command: &str, args: &[&str]) -> Result<()> {
+    let output = Command::new(command).args(args).output()?;
+    if output.status.success() {
+        Ok(())
+    } else {
+        Err(format!(
+            "{} exited with status code {}",
+            command,
+            output.status.code().unwrap_or(-1)
+        ).into())
+    }
 }

@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["reujab <reujab@gmail.com>"]
 
 [dependencies]
-reqwest = "0.8"
 dirs = "1.0"
+enquote = "1"
+reqwest = "0.8"
 url = "1.7"
