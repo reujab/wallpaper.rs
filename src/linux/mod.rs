@@ -1,5 +1,6 @@
 use download_image;
 use enquote;
+use run;
 use std::env;
 use std::process::Command;
 use Result;
@@ -44,10 +45,10 @@ pub fn set_from_path(path: &str) -> Result<()> {
 
     if is_gnome_compliant(&desktop) {
         let uri = enquote::enquote('"', &format!("file://{}", path));
-        Command::new("gsettings")
-            .args(&["set", "org.gnome.desktop.background", "picture-uri", &uri])
-            .output()?;
-        return Ok(());
+        return run(
+            "gsettings",
+            &["set", "org.gnome.desktop.background", "picture-uri", &uri],
+        );
     }
 
     match desktop.as_str() {
@@ -135,21 +136,8 @@ fn parse_dconf(command: &str, args: &[&str]) -> Result<String> {
 
     // removes file protocol
     if stdout.starts_with("file://") {
-        stdout = stdout.split_at(7).1.into();
+        stdout = stdout[7..].into();
     }
 
     Ok(stdout)
-}
-
-fn run(command: &str, args: &[&str]) -> Result<()> {
-    let output = Command::new(command).args(args).output()?;
-    if output.status.success() {
-        Ok(())
-    } else {
-        Err(format!(
-            "{} exited with status code {}",
-            command,
-            output.status.code().unwrap_or(-1)
-        ).into())
-    }
 }

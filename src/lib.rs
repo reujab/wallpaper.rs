@@ -10,6 +10,7 @@ pub use linux::*;
 
 use std::error::Error;
 use std::fs::File;
+use std::process::Command;
 use url::Url;
 
 type Result<T> = std::result::Result<T, Box<Error>>;
@@ -27,4 +28,17 @@ fn download_image(url: &Url) -> Result<String> {
     reqwest::get(url.as_str())?.copy_to(&mut file)?;
 
     Ok(file_path.to_str().to_owned().unwrap().into())
+}
+
+fn run(command: &str, args: &[&str]) -> Result<()> {
+    let output = Command::new(command).args(args).output()?;
+    if output.status.success() {
+        Ok(())
+    } else {
+        Err(format!(
+            "{} exited with status code {}",
+            command,
+            output.status.code().unwrap_or(-1)
+        ).into())
+    }
 }
