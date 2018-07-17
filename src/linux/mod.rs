@@ -1,3 +1,4 @@
+use download_image;
 use enquote::enquote;
 use std::env;
 use std::process::Command;
@@ -89,6 +90,29 @@ pub fn set_from_path(path: &str) -> Result<()> {
         ),
         "i3" => run("feh", &["--bg-fill", &path]),
         _ => Err("unsupported desktop".into()),
+    }
+}
+
+/// Sets the wallpaper for the current desktop from a URL.
+pub fn set_from_url(url: &str) -> Result<()> {
+    let desktop = env::var("XDG_CURRENT_DESKTOP")?;
+
+    match desktop.as_str() {
+        // only some GNOME-based desktops support urls for picture-uri
+        "GNOME" | "ubuntu:GNOME" => run(
+            "gsettings",
+            &[
+                "set",
+                "org.gnome.desktop.background",
+                "picture-uri",
+                &enquote('"', url),
+            ],
+        ),
+        "i3" => run("feh", &["--bg-fill", url]),
+        _ => {
+            let path = download_image(&url.parse()?)?;
+            set_from_path(&path)
+        }
     }
 }
 
