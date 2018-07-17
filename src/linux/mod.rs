@@ -1,3 +1,5 @@
+mod kde;
+
 use download_image;
 use enquote;
 use run;
@@ -17,7 +19,7 @@ pub fn get() -> Result<String> {
     }
 
     match desktop.as_str() {
-        "KDE" => Err("TODO".into()),
+        "KDE" => kde::get(),
         "X-Cinnamon" => parse_dconf(
             "dconf",
             &["read", "/org/cinnamon/desktop/background/picture-uri"],
@@ -52,7 +54,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
     }
 
     match desktop.as_str() {
-        "KDE" => Err("TODO".into()),
+        "KDE" => kde::set(path),
         "X-Cinnamon" => run(
             "dconf",
             &[
