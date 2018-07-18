@@ -1,10 +1,18 @@
+use std::error::Error;
+
+// i really wish you could group multiple lines using a single #[cfg]
+
 // common
+#[cfg(any(unix, windows))]
 extern crate dirs;
+#[cfg(any(unix, windows))]
 extern crate reqwest;
+#[cfg(any(unix, windows))]
 extern crate url;
 
-use std::error::Error;
+#[cfg(any(unix, windows))]
 use std::fs::File;
+#[cfg(any(unix, windows))]
 use url::Url;
 
 // unix
@@ -36,8 +44,16 @@ mod windows;
 #[cfg(windows)]
 pub use windows::*;
 
+// unsupported
+#[cfg(not(any(unix, windows)))]
+mod unsupported;
+
+#[cfg(not(any(unix, windows)))]
+pub use unsupported::*;
+
 type Result<T> = std::result::Result<T, Box<Error>>;
 
+#[cfg(any(unix, windows))]
 pub fn download_image(url: &Url) -> Result<String> {
     let cache_dir = dirs::cache_dir().ok_or("no cache dir")?;
     let segments = url.path_segments().ok_or("no path segments")?;

@@ -3,7 +3,7 @@ name = "wallpaper"
 version = "0.1.0"
 authors = ["reujab <reujab@gmail.com>"]
 
-[dependencies]
+[target.'cfg(any(unix, windows))'.dependencies]
 dirs = "1.0"
 reqwest = "0.8"
 url = "1.7"
