@@ -5,10 +5,12 @@ authors = ["reujab <reujab@gmail.com>"]
 
 [dependencies]
 dirs = "1.0"
-enquote = "1"
 reqwest = "0.8"
-rust-ini = "0.12"
 url = "1.7"
+
+[target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
+enquote = "1"
+rust-ini = "0.12"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["winuser"] }

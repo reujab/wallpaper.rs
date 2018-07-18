@@ -1,10 +1,3 @@
-extern crate winapi;
-
-use self::winapi::um::winuser::SystemParametersInfoW;
-use self::winapi::um::winuser::SPIF_SENDCHANGE;
-use self::winapi::um::winuser::SPIF_UPDATEINIFILE;
-use self::winapi::um::winuser::SPI_GETDESKWALLPAPER;
-use self::winapi::um::winuser::SPI_SETDESKWALLPAPER;
 use download_image;
 use std::ffi::OsStr;
 use std::io;
@@ -12,6 +5,11 @@ use std::iter;
 use std::mem;
 use std::os::raw::c_void;
 use std::os::windows::ffi::OsStrExt;
+use winapi::um::winuser::SystemParametersInfoW;
+use winapi::um::winuser::SPIF_SENDCHANGE;
+use winapi::um::winuser::SPIF_UPDATEINIFILE;
+use winapi::um::winuser::SPI_GETDESKWALLPAPER;
+use winapi::um::winuser::SPI_SETDESKWALLPAPER;
 use Result;
 
 /// Returns the current wallpaper.

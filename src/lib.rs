@@ -1,32 +1,44 @@
+// common
 extern crate dirs;
-extern crate enquote;
-extern crate ini;
 extern crate reqwest;
 extern crate url;
 
-#[cfg(target_os = "linux")]
-pub mod linux;
-#[cfg(target_os = "linux")]
+use std::error::Error;
+use std::fs::File;
+use url::Url;
+
+// unix
+#[cfg(all(unix, not(target_os = "macos")))]
+extern crate enquote;
+#[cfg(all(unix, not(target_os = "macos")))]
+extern crate ini;
+
+#[cfg(all(unix, not(target_os = "macos")))]
+mod linux;
+
+#[cfg(all(unix, not(target_os = "macos")))]
 pub use linux::*;
 
+// macos
 #[cfg(target_os = "macos")]
-pub mod macos;
+mod macos;
+
 #[cfg(target_os = "macos")]
 pub use macos::*;
 
+// windows
 #[cfg(windows)]
-pub mod windows;
+extern crate winapi;
+
+#[cfg(windows)]
+mod windows;
+
 #[cfg(windows)]
 pub use windows::*;
 
-use std::error::Error;
-use std::fs::File;
-use std::process::Command;
-use url::Url;
-
 type Result<T> = std::result::Result<T, Box<Error>>;
 
-fn download_image(url: &Url) -> Result<String> {
+pub fn download_image(url: &Url) -> Result<String> {
     let cache_dir = dirs::cache_dir().ok_or("no cache dir")?;
     let segments = url.path_segments().ok_or("no path segments")?;
     let mut file_name = segments.last().ok_or("no file name")?;
@@ -41,7 +53,10 @@ fn download_image(url: &Url) -> Result<String> {
     Ok(file_path.to_str().to_owned().unwrap().into())
 }
 
+#[cfg(unix)]
 fn get_stdout(command: &str, args: &[&str]) -> Result<String> {
+    use std::process::Command;
+
     let output = Command::new(command).args(args).output()?;
     if output.status.success() {
         Ok(String::from_utf8(output.stdout)?.trim().into())
@@ -54,6 +69,7 @@ fn get_stdout(command: &str, args: &[&str]) -> Result<String> {
     }
 }
 
+#[cfg(unix)]
 #[inline]
 fn run(command: &str, args: &[&str]) -> Result<()> {
     get_stdout(command, args)?;
