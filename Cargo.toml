@@ -7,4 +7,5 @@ authors = ["reujab <reujab@gmail.com>"]
 dirs = "1.0"
 enquote = "1"
 reqwest = "0.8"
+rust-ini = "0.12"
 url = "1.7"

@@ -1,5 +1,6 @@
 extern crate dirs;
 extern crate enquote;
+extern crate ini;
 extern crate reqwest;
 extern crate url;
 

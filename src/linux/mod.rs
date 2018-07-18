@@ -1,4 +1,5 @@
 mod kde;
+mod lxde;
 
 use download_image;
 use enquote;
@@ -29,7 +30,7 @@ pub fn get() -> Result<String> {
             &["read", "/org/mate/desktop/background/picture-filename"],
         ),
         "XFCE" => Err("TODO".into()),
-        "LXDE" => Err("TODO".into()),
+        "LXDE" => lxde::get(),
         "Deepin" => parse_dconf(
             "dconf",
             &[
