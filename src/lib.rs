@@ -14,6 +14,11 @@ pub mod macos;
 #[cfg(target_os = "macos")]
 pub use macos::*;
 
+#[cfg(windows)]
+pub mod windows;
+#[cfg(windows)]
+pub use windows::*;
+
 use std::error::Error;
 use std::fs::File;
 use std::process::Command;
