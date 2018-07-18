@@ -1,6 +1,6 @@
 //! This library gets and sets the desktop wallpaper/background.
 //!
-//! The supported desktops supported are as follows:
+//! The supported desktops are:
 //! * Windows
 //! * macOS
 //! * GNOME
