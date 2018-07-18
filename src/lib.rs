@@ -1,3 +1,30 @@
+//! This library gets and sets the desktop wallpaper/background.
+//!
+//! The supported desktops supported are as follows:
+//! * Windows
+//! * macOS
+//! * GNOME
+//! * KDE
+//! * Cinnamon
+//! * Unity
+//! * Budgie
+//! * XFCE
+//! * LXDE
+//! * MATE
+//! * Deepin
+//! * i3 (set only)
+//!
+//! # Examples
+//! ```
+//! extern crate wallpaper;
+//!
+//! fn main() {
+//!     println!("{:?}", wallpaper::get());
+//!     wallpaper::set_from_url("https://source.unsplash.com/random").unwrap();
+//!     println!("{:?}", wallpaper::get());
+//! }
+//! ```
+
 use std::error::Error;
 
 // i really wish you could group multiple lines using a single #[cfg]
