@@ -80,7 +80,7 @@ fn get_stdout(command: &str, args: &[&str]) -> Result<String> {
         Err(format!(
             "{} exited with status code {}",
             command,
-            output.status.code().unwrap_or(-1)
+            output.status.code().unwrap_or(-1),
         ).into())
     }
 }
