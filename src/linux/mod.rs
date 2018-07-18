@@ -3,9 +3,9 @@ mod lxde;
 
 use download_image;
 use enquote;
+use get_stdout;
 use run;
 use std::env;
-use std::process::Command;
 use Result;
 
 /// Returns the wallpaper of the current desktop.
@@ -29,24 +29,15 @@ pub fn get() -> Result<String> {
             "dconf",
             &["read", "/org/mate/desktop/background/picture-filename"],
         ),
-        "XFCE" => {
-            let output = Command::new("xfconf-query")
-                .args(&[
-                    "-c",
-                    "xfce4-desktop",
-                    "-p",
-                    "/backdrop/screen0/monitor0/workspace0/last-image",
-                ])
-                .output()?;
-            if !output.status.success() {
-                return Err(format!(
-                    "xfconf-query exited with status code {}",
-                    output.status.code().unwrap_or(-1),
-                ).into());
-            }
-
-            Ok(String::from_utf8(output.stdout)?.trim().into())
-        }
+        "XFCE" => get_stdout(
+            "xfconf-query",
+            &[
+                "-c",
+                "xfce4-desktop",
+                "-p",
+                "/backdrop/screen0/monitor0/workspace0/last-image",
+            ],
+        ),
         "LXDE" => lxde::get(),
         "Deepin" => parse_dconf(
             "dconf",
@@ -143,21 +134,10 @@ fn is_gnome_compliant(desktop: &str) -> bool {
 }
 
 fn parse_dconf(command: &str, args: &[&str]) -> Result<String> {
-    let output = Command::new(command).args(args).output()?;
-    if !output.status.success() {
-        return Err(format!(
-            "{} exited with status code {}",
-            command,
-            output.status.code().unwrap_or(-1),
-        ).into());
-    }
-
-    let mut stdout = enquote::unquote(&String::from_utf8(output.stdout)?.trim().to_owned())?;
-
+    let mut stdout = enquote::unquote(&get_stdout(command, args)?)?;
     // removes file protocol
     if stdout.starts_with("file://") {
         stdout = stdout[7..].into();
     }
-
     Ok(stdout)
 }

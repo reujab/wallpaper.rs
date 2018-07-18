@@ -31,10 +31,10 @@ fn download_image(url: &Url) -> Result<String> {
     Ok(file_path.to_str().to_owned().unwrap().into())
 }
 
-fn run(command: &str, args: &[&str]) -> Result<()> {
+fn get_stdout(command: &str, args: &[&str]) -> Result<String> {
     let output = Command::new(command).args(args).output()?;
     if output.status.success() {
-        Ok(())
+        Ok(String::from_utf8(output.stdout)?.trim().into())
     } else {
         Err(format!(
             "{} exited with status code {}",
@@ -42,4 +42,10 @@ fn run(command: &str, args: &[&str]) -> Result<()> {
             output.status.code().unwrap_or(-1)
         ).into())
     }
+}
+
+#[inline]
+fn run(command: &str, args: &[&str]) -> Result<()> {
+    get_stdout(command, args)?;
+    Ok(())
 }
