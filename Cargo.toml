@@ -1,7 +1,13 @@
 [package]
 name = "wallpaper"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["reujab <reujab@gmail.com>"]
+description = "Gets and sets the desktop wallpaper/background."
+repository = "https://github.com/reujab/wallpaper.rs"
+readme = "readme.md"
+keywords = ["desktop", "wallpaper", "background"]
+categories = ["api-bindings"]
+license = "Unlicense"
 
 [target.'cfg(any(unix, windows))'.dependencies]
 dirs = "1.0"
