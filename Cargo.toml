@@ -8,8 +8,10 @@ dirs = "1.0"
 reqwest = "0.8"
 url = "1.7"
 
-[target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
+[target.'cfg(unix)'.dependencies]
 enquote = "1"
+
+[target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
 rust-ini = "0.12"
 
 [target.'cfg(windows)'.dependencies]

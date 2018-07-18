@@ -1,4 +1,5 @@
 use download_image;
+use enquote;
 use get_stdout;
 use run;
 use Result;
@@ -22,7 +23,7 @@ pub fn set_from_file(path: &str) -> Result<()> {
             "-e",
             &format!(
                 r#"tell application "Finder" to set desktop picture to POSIX file {}"#,
-                path,
+                enquote::enquote('"', path),
             ),
         ],
     )

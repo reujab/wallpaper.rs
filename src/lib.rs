@@ -43,8 +43,10 @@ use std::fs::File;
 use url::Url;
 
 // unix
-#[cfg(all(unix, not(target_os = "macos")))]
+#[cfg(unix)]
 extern crate enquote;
+
+// linux and *bsd
 #[cfg(all(unix, not(target_os = "macos")))]
 extern crate ini;
 
