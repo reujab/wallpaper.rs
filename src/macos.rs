@@ -16,7 +16,7 @@ pub fn get() -> Result<String> {
 }
 
 // Sets the wallpaper from a file.
-pub fn set_from_file(path: &str) -> Result<()> {
+pub fn set_from_path(path: &str) -> Result<()> {
     run(
         "osascript",
         &[
@@ -32,5 +32,5 @@ pub fn set_from_file(path: &str) -> Result<()> {
 // Sets the wallpaper from a URL.
 pub fn set_from_url(url: &str) -> Result<()> {
     let path = download_image(&url.parse()?)?;
-    set_from_file(&path)
+    set_from_path(&path)
 }

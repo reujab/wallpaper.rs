@@ -51,7 +51,7 @@ pub fn get() -> Result<String> {
 }
 
 /// Sets the wallpaper for the current desktop from a file path.
-pub fn set_from_file(path: &str) -> Result<()> {
+pub fn set_from_path(path: &str) -> Result<()> {
     let desktop = env::var("XDG_CURRENT_DESKTOP")?;
 
     if is_gnome_compliant(&desktop) {
