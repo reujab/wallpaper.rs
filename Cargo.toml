@@ -11,7 +11,7 @@ license = "Unlicense"
 
 [target.'cfg(any(unix, windows))'.dependencies]
 dirs = "1.0"
-reqwest = "0.8"
+reqwest = "0.9"
 url = "1.7"
 
 [target.'cfg(unix)'.dependencies]
