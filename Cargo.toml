@@ -9,9 +9,13 @@ keywords = ["desktop", "wallpaper", "background"]
 categories = ["api-bindings"]
 license = "Unlicense"
 
+[features]
+default = ["from-url"]
+from-url = ["reqwest"]
+
 [target.'cfg(any(unix, windows))'.dependencies]
 dirs = "1.0"
-reqwest = "0.9"
+reqwest = { version = "0.9", optional = true }
 url = "1.7"
 
 [target.'cfg(unix)'.dependencies]
