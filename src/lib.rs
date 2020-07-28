@@ -80,7 +80,7 @@ mod unsupported;
 #[cfg(not(any(unix, windows)))]
 pub use unsupported::*;
 
-type Result<T> = std::result::Result<T, Box<Error>>;
+type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 #[cfg(all(any(unix, windows), feature = "from-url"))]
 fn download_image(url: &Url) -> Result<String> {
@@ -110,7 +110,8 @@ fn get_stdout(command: &str, args: &[&str]) -> Result<String> {
             "{} exited with status code {}",
             command,
             output.status.code().unwrap_or(-1),
-        ).into())
+        )
+        .into())
     }
 }
 
