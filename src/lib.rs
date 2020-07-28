@@ -32,14 +32,14 @@ use std::error::Error;
 // common
 #[cfg(any(unix, windows))]
 extern crate dirs;
-#[cfg(any(unix, windows))]
+#[cfg(all(any(unix, windows), feature = "from-url"))]
 extern crate reqwest;
-#[cfg(any(unix, windows))]
+#[cfg(all(any(unix, windows), feature = "from-url"))]
 extern crate url;
 
-#[cfg(any(unix, windows))]
+#[cfg(all(any(unix, windows), feature = "from-url"))]
 use std::fs::File;
-#[cfg(any(unix, windows))]
+#[cfg(all(any(unix, windows), feature = "from-url"))]
 use url::Url;
 
 // unix
@@ -82,7 +82,7 @@ pub use unsupported::*;
 
 type Result<T> = std::result::Result<T, Box<Error>>;
 
-#[cfg(any(unix, windows))]
+#[cfg(all(any(unix, windows), feature = "from-url"))]
 fn download_image(url: &Url) -> Result<String> {
     let cache_dir = dirs::cache_dir().ok_or("no cache dir")?;
     let segments = url.path_segments().ok_or("no path segments")?;

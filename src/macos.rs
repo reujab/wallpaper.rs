@@ -30,6 +30,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
 }
 
 // Sets the wallpaper from a URL.
+#[cfg("from-url")]
 pub fn set_from_url(url: &str) -> Result<()> {
     let path = download_image(&url.parse()?)?;
     set_from_path(&path)

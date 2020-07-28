@@ -1,6 +1,7 @@
 mod kde;
 mod lxde;
 
+#[cfg(feature = "from-url")]
 use download_image;
 use enquote;
 use get_stdout;
@@ -106,6 +107,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
 }
 
 /// Sets the wallpaper for the current desktop from a URL.
+#[cfg(feature = "from-url")]
 pub fn set_from_url(url: &str) -> Result<()> {
     let desktop = env::var("XDG_CURRENT_DESKTOP")?;
 
