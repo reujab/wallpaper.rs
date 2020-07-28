@@ -11,12 +11,12 @@ license = "Unlicense"
 
 [features]
 default = ["from-url"]
-from-url = ["reqwest"]
+from-url = ["reqwest", "url"]
 
 [target.'cfg(any(unix, windows))'.dependencies]
 dirs = "1.0"
 reqwest = { version = "0.9", optional = true }
-url = "1.7"
+url = { version = "1.7", optional = true }
 
 [target.'cfg(unix)'.dependencies]
 enquote = "1"
