@@ -8,6 +8,7 @@ readme = "readme.md"
 keywords = ["desktop", "wallpaper", "background"]
 categories = ["api-bindings"]
 license = "Unlicense"
+edition = "2018"
 
 [features]
 default = ["from_url"]
