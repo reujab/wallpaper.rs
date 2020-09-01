@@ -122,7 +122,7 @@ pub fn set_from_url(url: &str) -> Result<()> {
                 &enquote::enquote('"', url),
             ],
         ),
-        "i3" => run("feh", &["--bg-fill", url]),
+        "i3" => run("feh", &["--bg-fill", &url.replace("\"", "")]),
         _ => {
             let path = download_image(&url.parse()?)?;
             set_from_path(&path)
