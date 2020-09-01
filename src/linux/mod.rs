@@ -1,16 +1,16 @@
 mod kde;
 mod lxde;
 
-#[cfg(feature = "from-url")]
-use download_image;
+#[cfg(feature = "from_url")]
+use crate::download_image;
+use crate::get_stdout;
+use crate::run;
 use enquote;
-use get_stdout;
-use run;
 use std::env;
 use Result;
 
 /// Returns the wallpaper of the current desktop.
-pub fn get() -> Result<String> {
+pub fn get() -> Result<String, Box<dyn std::error::Error>> {
     let desktop = env::var("XDG_CURRENT_DESKTOP")?;
 
     if is_gnome_compliant(&desktop) {
@@ -52,7 +52,7 @@ pub fn get() -> Result<String> {
 }
 
 /// Sets the wallpaper for the current desktop from a file path.
-pub fn set_from_path(path: &str) -> Result<()> {
+pub fn set_from_path(path: &str) -> Result<(), Box<dyn std::error::Error>> {
     let desktop = env::var("XDG_CURRENT_DESKTOP")?;
 
     if is_gnome_compliant(&desktop) {
@@ -107,8 +107,8 @@ pub fn set_from_path(path: &str) -> Result<()> {
 }
 
 /// Sets the wallpaper for the current desktop from a URL.
-#[cfg(feature = "from-url")]
-pub fn set_from_url(url: &str) -> Result<()> {
+#[cfg(feature = "from_url")]
+pub async fn set_from_url(url: &str) -> Result<(), Box<dyn std::error::Error>> {
     let desktop = env::var("XDG_CURRENT_DESKTOP")?;
 
     match desktop.as_str() {
@@ -124,7 +124,7 @@ pub fn set_from_url(url: &str) -> Result<()> {
         ),
         "i3" => run("feh", &["--bg-fill", &url.replace("\"", "")]),
         _ => {
-            let path = download_image(&url.parse()?)?;
+            let path = download_image(&url.parse()?).await?;
             set_from_path(&path)
         }
     }
@@ -135,7 +135,7 @@ fn is_gnome_compliant(desktop: &str) -> bool {
     desktop.contains("GNOME") || desktop == "Unity" || desktop == "Pantheon"
 }
 
-fn parse_dconf(command: &str, args: &[&str]) -> Result<String> {
+fn parse_dconf(command: &str, args: &[&str]) -> Result<String, Box<dyn std::error::Error>> {
     let mut stdout = enquote::unquote(&get_stdout(command, args)?)?;
     // removes file protocol
     if stdout.starts_with("file://") {

@@ -3,7 +3,7 @@ use ini::Ini;
 use std::env;
 use Result;
 
-pub fn get() -> Result<String> {
+pub fn get() -> Result<String, Box<dyn std::error::Error>> {
     let session = env::var("DESKTOP_SESSION").unwrap_or_else(|_| "LXDE".into());
     let path = dirs::config_dir()
         .ok_or("could not find config directory")?
@@ -14,5 +14,6 @@ pub fn get() -> Result<String> {
         .ok_or("no '*' section found")?
         .get("wallpaper")
         .ok_or("no lxde image found")?
-        .clone())
+        .clone()
+        .to_string())
 }

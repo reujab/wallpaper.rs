@@ -91,7 +91,7 @@ async fn download_image(url: &Url) -> Result<String> {
     let file_path = cache_dir.join(file_name);
 
     // let mut file = File::create(&file_path)?;
-    std::fs::write(&file_path, reqwest::get(url.as_str()).await?.bytes().await?)?;//.copy_to(&mut file)?;
+    std::fs::write(&file_path, reqwest::get(url.as_str()).await?.bytes().await?)?; //.copy_to(&mut file)?;
 
     Ok(file_path.to_str().to_owned().unwrap().into())
 }

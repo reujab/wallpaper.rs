@@ -1,13 +1,13 @@
+use crate::run;
 use dirs;
 use enquote;
-use run;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
 use Result;
 
 /// Returns the wallpaper of KDE.
-pub fn get() -> Result<String> {
+pub fn get() -> Result<String, Box<dyn std::error::Error>> {
     let path = dirs::config_dir()
         .ok_or("could not find config directory")?
         .join("plasma-org.kde.plasma.desktop-appletsrc");
@@ -28,7 +28,7 @@ pub fn get() -> Result<String> {
 }
 
 /// Sets the wallpaper for KDE.
-pub fn set(path: &str) -> Result<()> {
+pub fn set(path: &str) -> Result<(), Box<dyn std::error::Error>> {
     run(
         "qdbus",
         &[
