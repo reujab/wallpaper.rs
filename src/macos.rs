@@ -5,7 +5,7 @@ use run;
 use Result;
 
 /// Returns the current wallpaper.
-pub fn get() -> Result<String> {
+pub fn get() -> Result<String, Box<dyn std::error::Error>> {
     get_stdout(
         "osascript",
         &[
@@ -16,7 +16,7 @@ pub fn get() -> Result<String> {
 }
 
 // Sets the wallpaper from a file.
-pub fn set_from_path(path: &str) -> Result<()> {
+pub fn set_from_path(path: &str) -> Result<(), Box<dyn std::error::Error>> {
     run(
         "osascript",
         &[
@@ -31,7 +31,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
 
 // Sets the wallpaper from a URL.
 #[cfg("from-url")]
-pub fn set_from_url(url: &str) -> Result<()> {
+pub fn set_from_url(url: &str) -> Result<(), Box<dyn std::error::Error>> {
     let path = download_image(&url.parse()?)?;
     set_from_path(&path)
 }

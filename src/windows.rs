@@ -1,5 +1,5 @@
-#[cfg("from-url")]
-use download_image;
+#[cfg(feature = "from_url")]
+use crate::download_image;
 use std::ffi::OsStr;
 use std::io;
 use std::iter;
@@ -14,7 +14,7 @@ use winapi::um::winuser::SPI_SETDESKWALLPAPER;
 use Result;
 
 /// Returns the current wallpaper.
-pub fn get() -> Result<String> {
+pub fn get() -> Result<String, Box<dyn std::error::Error>> {
     unsafe {
         let buffer: [u16; 260] = mem::zeroed();
         let successful = SystemParametersInfoW(
@@ -27,7 +27,7 @@ pub fn get() -> Result<String> {
         if successful {
             let path = String::from_utf16(&buffer)?
                 // removes trailing zeroes from buffer
-                .trim_right_matches('\x00')
+                .trim_end_matches('\x00')
                 .into();
             Ok(path)
         } else {
@@ -37,7 +37,7 @@ pub fn get() -> Result<String> {
 }
 
 /// Sets the wallpaper from a file.
-pub fn set_from_path(path: &str) -> Result<()> {
+pub fn set_from_path(path: &str) -> Result<(), Box<dyn std::error::Error>> {
     unsafe {
         let path = OsStr::new(path)
             .encode_wide()
@@ -60,8 +60,8 @@ pub fn set_from_path(path: &str) -> Result<()> {
 }
 
 /// Sets the wallpaper from a URL.
-#[cfg("from-url")]
-pub fn set_from_url(url: &str) -> Result<()> {
-    let path = download_image(&url.parse()?)?;
+#[cfg(feature = "from_url")]
+pub async fn set_from_url(url: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let path: String = download_image(&url.parse()?).await?;
     set_from_path(&path)
 }

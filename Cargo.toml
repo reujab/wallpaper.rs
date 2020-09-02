@@ -8,21 +8,22 @@ readme = "readme.md"
 keywords = ["desktop", "wallpaper", "background"]
 categories = ["api-bindings"]
 license = "Unlicense"
+edition = "2018"
 
 [features]
-default = ["from-url"]
-from-url = ["reqwest", "url"]
+default = ["from_url"]
+from_url = ["reqwest", "url"]
 
 [target.'cfg(any(unix, windows))'.dependencies]
-dirs = "1.0"
-reqwest = { version = "0.9", optional = true }
-url = { version = "1.7", optional = true }
+dirs = "3.0.1"
+reqwest = { version = "0.10.8", optional = true, features = ["blocking"] }
+url = { version = "2.1.1", optional = true }
 
 [target.'cfg(unix)'.dependencies]
 enquote = "1"
 
 [target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
-rust-ini = "0.12"
+rust-ini = "0.15.3"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["winuser"] }
