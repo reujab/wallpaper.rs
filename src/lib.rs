@@ -73,6 +73,16 @@ pub use unsupported::*;
 
 type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
+#[derive(Clone, Debug)]
+pub enum Mode {
+    Center,
+    Scale,
+    Span,
+    Stretch,
+    Tile,
+    Zoom,
+}
+
 #[cfg(unix)]
 fn get_stdout(command: &str, args: &[&str]) -> Result<String> {
     use std::process::Command;

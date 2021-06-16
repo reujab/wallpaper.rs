@@ -1,4 +1,4 @@
-use crate::{run, Result};
+use crate::{run, Mode, Result};
 use dirs;
 use ini::Ini;
 use std::env;
@@ -19,4 +19,21 @@ pub fn get() -> Result<String> {
 
 pub fn set(path: &str) -> Result<()> {
     run("pcmanfm", &["-w", path])
+}
+
+pub fn set_mode(mode: Mode) -> Result<()> {
+    run(
+        "pcmanfm",
+        &[
+            "--wallpaper-mode",
+            match mode {
+                Mode::Center => "center",
+                Mode::Scale => "fit",
+                Mode::Span => "crop",
+                Mode::Stretch => "stretch",
+                Mode::Tile => "tile",
+                Mode::Zoom => "stretch",
+            },
+        ],
+    )
 }

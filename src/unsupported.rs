@@ -7,3 +7,7 @@ pub fn get() -> Result<String> {
 pub fn set_from_path(_: &str) -> Result<()> {
     Err("unsupported operating system".into())
 }
+
+pub fn set_mode(_: Mode) -> Result<()> {
+    Err("unsupported operating system".into())
+}

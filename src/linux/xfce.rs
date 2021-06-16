@@ -1,5 +1,5 @@
+use crate::{get_stdout, run, Mode, Result};
 use std::error::Error;
-use {get_stdout, run};
 
 #[derive(Debug)]
 struct NoDesktopsError;
@@ -12,11 +12,11 @@ impl std::fmt::Display for NoDesktopsError {
     }
 }
 
-fn get_desktops() -> Result<Vec<String>, Box<dyn Error>> {
+fn get_desktop_props(key: &str) -> Result<Vec<String>> {
     let stdout = get_stdout("xfconf-query", &["--channel", "xfce4-desktop", "--list"])?;
     let desktops = stdout
         .split('\n')
-        .filter(|line| line.ends_with("last-image"))
+        .filter(|line| line.ends_with(key))
         .map(|desktop| desktop.to_string())
         .collect::<Vec<String>>();
 
@@ -27,8 +27,8 @@ fn get_desktops() -> Result<Vec<String>, Box<dyn Error>> {
     Ok(desktops)
 }
 
-pub fn get() -> Result<String, Box<dyn Error>> {
-    let desktops = get_desktops()?;
+pub fn get() -> Result<String> {
+    let desktops = get_desktop_props("last-image")?;
     let path = get_stdout(
         "xfconf-query",
         &["--channel", "xfce4-desktop", "--property", &desktops[0]],
@@ -37,8 +37,8 @@ pub fn get() -> Result<String, Box<dyn Error>> {
     Ok(path.trim().to_string())
 }
 
-pub fn set(path: &str) -> Result<(), Box<dyn Error>> {
-    for desktop in get_desktops()? {
+pub fn set(path: &str) -> Result<()> {
+    for desktop in get_desktop_props("last-image")? {
         run(
             "xfconf-query",
             &[
@@ -48,6 +48,31 @@ pub fn set(path: &str) -> Result<(), Box<dyn Error>> {
                 &desktop,
                 "--set",
                 path,
+            ],
+        )?;
+    }
+
+    Ok(())
+}
+
+pub fn set_mode(mode: Mode) -> Result<()> {
+    for property in get_desktop_props("image-style")? {
+        run(
+            "xfconf-query",
+            &[
+                "--channel",
+                "xfce4-desktop",
+                "--property",
+                &property,
+                "--set",
+                match mode {
+                    Mode::Center => "1",
+                    Mode::Scale => "4",
+                    Mode::Span => "5",
+                    Mode::Stretch => "3",
+                    Mode::Tile => "2",
+                    Mode::Zoom => "5",
+                },
             ],
         )?;
     }

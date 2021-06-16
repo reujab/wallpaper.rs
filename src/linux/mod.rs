@@ -3,7 +3,7 @@ mod kde;
 mod lxde;
 mod xfce;
 
-use crate::{run, Result};
+use crate::{run, Mode, Result};
 use enquote;
 use get_stdout;
 use std::env;
@@ -75,7 +75,44 @@ pub fn set_from_path(path: &str) -> Result<()> {
                 &enquote::enquote('"', &format!("file://{}", path)),
             ],
         ),
-        "i3" => run("feh", &["--bg-fill", &path]),
+        _ => run("feh", &["--bg-fill", &path]),
+    }
+}
+
+pub fn set_mode(mode: Mode) -> Result<()> {
+    let desktop = env::var("XDG_CURRENT_DESKTOP")?;
+
+    if gnome::is_compliant(&desktop) {
+        return gnome::set_mode(mode);
+    }
+
+    match desktop.as_str() {
+        "X-Cinnamon" => run(
+            "dconf",
+            &[
+                "write",
+                "/org/cinnamon/desktop/background/picture-options",
+                &mode.get_gnome_string(),
+            ],
+        ),
+        "MATE" => run(
+            "dconf",
+            &[
+                "write",
+                "/org/mate/desktop/background/picture-options",
+                &mode.get_gnome_string(),
+            ],
+        ),
+        "XFCE" => xfce::set_mode(mode),
+        "LXDE" => lxde::set_mode(mode),
+        "Deepin" => run(
+            "dconf",
+            &[
+                "write",
+                "/com/deepin/wrap/gnome/desktop/background/picture-options",
+                &mode.get_gnome_string(),
+            ],
+        ),
         _ => Err("unsupported desktop".into()),
     }
 }
