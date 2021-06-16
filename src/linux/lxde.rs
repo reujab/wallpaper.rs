@@ -18,5 +18,5 @@ pub fn get() -> Result<String> {
 }
 
 pub fn set(path: &str) -> Result<()> {
-    run("pcmanfn", &["-w", path])
+    run("pcmanfm", &["-w", path])
 }
