@@ -1,22 +1,19 @@
+mod gnome;
 mod kde;
 mod lxde;
 mod xfce;
 
+use crate::{run, Result};
 use enquote;
 use get_stdout;
-use run;
 use std::env;
-use Result;
 
 /// Returns the wallpaper of the current desktop.
 pub fn get() -> Result<String> {
     let desktop = env::var("XDG_CURRENT_DESKTOP")?;
 
-    if is_gnome_compliant(&desktop) {
-        return parse_dconf(
-            "gsettings",
-            &["get", "org.gnome.desktop.background", "picture-uri"],
-        );
+    if gnome::is_compliant(&desktop) {
+        return gnome::get();
     }
 
     match desktop.as_str() {
@@ -46,12 +43,8 @@ pub fn get() -> Result<String> {
 pub fn set_from_path(path: &str) -> Result<()> {
     let desktop = env::var("XDG_CURRENT_DESKTOP")?;
 
-    if is_gnome_compliant(&desktop) {
-        let uri = enquote::enquote('"', &format!("file://{}", path));
-        return run(
-            "gsettings",
-            &["set", "org.gnome.desktop.background", "picture-uri", &uri],
-        );
+    if gnome::is_compliant(&desktop) {
+        return gnome::set(path);
     }
 
     match desktop.as_str() {
@@ -73,7 +66,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
             ],
         ),
         "XFCE" => xfce::set(path),
-        "LXDE" => run("pcmanfm", &["-w", &path]),
+        "LXDE" => lxde::set(path),
         "Deepin" => run(
             "dconf",
             &[
@@ -85,11 +78,6 @@ pub fn set_from_path(path: &str) -> Result<()> {
         "i3" => run("feh", &["--bg-fill", &path]),
         _ => Err("unsupported desktop".into()),
     }
-}
-
-#[inline]
-fn is_gnome_compliant(desktop: &str) -> bool {
-    desktop.contains("GNOME") || desktop == "Unity" || desktop == "Pantheon"
 }
 
 fn parse_dconf(command: &str, args: &[&str]) -> Result<String> {

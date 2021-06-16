@@ -1,7 +1,7 @@
+use crate::{run, Result};
 use dirs;
 use ini::Ini;
 use std::env;
-use Result;
 
 pub fn get() -> Result<String> {
     let session = env::var("DESKTOP_SESSION").unwrap_or_else(|_| "LXDE".into());
@@ -15,4 +15,8 @@ pub fn get() -> Result<String> {
         .get("wallpaper")
         .ok_or("no lxde image found")?
         .clone())
+}
+
+pub fn set(path: &str) -> Result<()> {
+    run("pcmanfn", &["-w", path])
 }
