@@ -1,4 +1,3 @@
-use download_image;
 use std::ffi::OsStr;
 use std::io;
 use std::iter;
@@ -56,10 +55,4 @@ pub fn set_from_path(path: &str) -> Result<()> {
             Err(io::Error::last_os_error().into())
         }
     }
-}
-
-/// Sets the wallpaper from a URL.
-pub fn set_from_url(url: &str) -> Result<()> {
-    let path = download_image(&url.parse()?)?;
-    set_from_path(&path)
 }

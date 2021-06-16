@@ -1,6 +1,6 @@
 [package]
 name = "wallpaper"
-version = "2.0.1"
+version = "3.0.0"
 authors = ["reujab <reujab@gmail.com>"]
 description = "Gets and sets the desktop wallpaper/background."
 repository = "https://github.com/reujab/wallpaper.rs"
@@ -11,8 +11,6 @@ license = "Unlicense"
 
 [target.'cfg(any(unix, windows))'.dependencies]
 dirs = "1.0"
-reqwest = "0.9"
-url = "1.7"
 
 [target.'cfg(unix)'.dependencies]
 enquote = "1"
