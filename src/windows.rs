@@ -77,7 +77,7 @@ pub fn set_mode(mode: Mode) -> Result<()> {
         "WallpaperStyle",
         &match mode {
             Mode::Center | Mode::Tile => "0",
-            Mode::Scale => "6",
+            Mode::Fit => "6",
             Mode::Span => "22",
             Mode::Stretch => "2",
             Mode::Zoom => "10",

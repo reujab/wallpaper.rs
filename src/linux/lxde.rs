@@ -28,11 +28,11 @@ pub fn set_mode(mode: Mode) -> Result<()> {
             "--wallpaper-mode",
             match mode {
                 Mode::Center => "center",
-                Mode::Scale => "fit",
-                Mode::Span => "crop",
+                Mode::Crop => "crop",
+                Mode::Fit => "fit",
+                Mode::Span => "screen",
                 Mode::Stretch => "stretch",
                 Mode::Tile => "tile",
-                Mode::Zoom => "stretch",
             },
         ],
     )

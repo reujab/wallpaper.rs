@@ -67,11 +67,11 @@ pub fn set_mode(mode: Mode) -> Result<()> {
                 "--set",
                 match mode {
                     Mode::Center => "1",
-                    Mode::Scale => "4",
+                    Mode::Crop => "5",
+                    Mode::Fit => "4",
                     Mode::Span => "5",
                     Mode::Stretch => "3",
                     Mode::Tile => "2",
-                    Mode::Zoom => "5",
                 },
             ],
         )?;

@@ -79,11 +79,11 @@ type Result<T> = std::result::Result<T, Box<dyn Error>>;
 #[derive(Clone, Debug)]
 pub enum Mode {
     Center,
-    Scale,
+    Crop,
+    Fit,
     Span,
     Stretch,
     Tile,
-    Zoom,
 }
 
 #[cfg(unix)]

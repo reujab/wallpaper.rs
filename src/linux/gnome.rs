@@ -39,11 +39,11 @@ impl Mode {
             '"',
             match self {
                 Mode::Center => "centered",
-                Mode::Scale => "scaled",
+                Mode::Crop => "zoom",
+                Mode::Fit => "scaled",
                 Mode::Span => "spanned",
                 Mode::Stretch => "stretched",
                 Mode::Tile => "wallpaper",
-                Mode::Zoom => "zoom",
             },
         )
     }
