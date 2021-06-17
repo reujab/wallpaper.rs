@@ -4,6 +4,7 @@ use ini::Ini;
 use std::env;
 
 pub fn get() -> Result<String> {
+    // DESKTOP_SESSION in used on Raspbian
     let session = env::var("DESKTOP_SESSION").unwrap_or_else(|_| "LXDE".into());
     let path = dirs::config_dir()
         .ok_or("could not find config directory")?
