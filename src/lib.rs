@@ -20,7 +20,7 @@
 //!
 //! fn main() {
 //!     println!("{:?}", wallpaper::get());
-//!     wallpaper::set("/usr/share/backgrounds/gnome/Tree.jpg").unwrap();
+//!     wallpaper::set_from_path("/usr/share/backgrounds/gnome/Tree.jpg").unwrap();
 //!     println!("{:?}", wallpaper::get());
 //! }
 //! ```
