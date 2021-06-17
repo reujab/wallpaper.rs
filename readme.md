@@ -20,6 +20,7 @@ The supported desktops are:
 extern crate wallpaper;
 
 fn main() {
-    println!("{:?}", wallpaper::get());
+    println!("{:?}", wallpaper::get().unwrap());
+    wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
 }
 ```
