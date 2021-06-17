@@ -1,3 +1,4 @@
+use crate::{Mode, Result};
 use std::ffi::OsStr;
 use std::io;
 use std::iter;
@@ -9,7 +10,8 @@ use winapi::um::winuser::SPIF_SENDCHANGE;
 use winapi::um::winuser::SPIF_UPDATEINIFILE;
 use winapi::um::winuser::SPI_GETDESKWALLPAPER;
 use winapi::um::winuser::SPI_SETDESKWALLPAPER;
-use Result;
+use winreg::enums::*;
+use winreg::RegKey;
 
 /// Returns the current wallpaper.
 pub fn get() -> Result<String> {
@@ -55,4 +57,34 @@ pub fn set_from_path(path: &str) -> Result<()> {
             Err(io::Error::last_os_error().into())
         }
     }
+}
+
+/// Sets the wallpaper style.
+pub fn set_mode(mode: Mode) -> Result<()> {
+    let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+    let (desktop, _) = hkcu.create_subkey(r"Control Panel\Desktop")?;
+
+    desktop.set_value(
+        "TileWallpaper",
+        &match mode {
+            Mode::Tile => "1",
+            _ => "0",
+        }
+        .to_string(),
+    )?;
+
+    desktop.set_value(
+        "WallpaperStyle",
+        &match mode {
+            Mode::Center | Mode::Tile => "0",
+            Mode::Scale => "6",
+            Mode::Span => "22",
+            Mode::Stretch => "2",
+            Mode::Zoom => "10",
+        }
+        .to_string(),
+    )?;
+
+    // updates wallpaper
+    set_from_path(&get()?)
 }

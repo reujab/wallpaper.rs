@@ -59,6 +59,9 @@ pub use macos::*;
 extern crate winapi;
 
 #[cfg(windows)]
+extern crate winreg;
+
+#[cfg(windows)]
 mod windows;
 
 #[cfg(windows)]
