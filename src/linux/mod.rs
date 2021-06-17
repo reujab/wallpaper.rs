@@ -87,6 +87,7 @@ pub fn set_mode(mode: Mode) -> Result<()> {
     }
 
     match desktop.as_str() {
+        "KDE" => kde::set_mode(mode),
         "X-Cinnamon" => run(
             "dconf",
             &[

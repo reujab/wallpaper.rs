@@ -1,10 +1,9 @@
+use crate::{run, Mode, Result};
 use dirs;
 use enquote;
-use run;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
-use Result;
 
 /// Returns the wallpaper of KDE.
 pub fn get() -> Result<String> {
@@ -29,21 +28,42 @@ pub fn get() -> Result<String> {
 
 /// Sets the wallpaper for KDE.
 pub fn set(path: &str) -> Result<()> {
+    eval(&format!(
+        r#"
+for (const desktop of desktops()) {{
+    desktop.currentConfigGroup = ["Wallpaper", "org.kde.image", "General"]
+    desktop.writeConfig("Image", {})
+}}"#,
+        enquote::enquote('"', &format!("file://{}", path)),
+    ))
+}
+
+pub fn set_mode(mode: Mode) -> Result<()> {
+    eval(&format!(
+        r#"
+for (const desktop of desktops()) {{
+    desktop.currentConfigGroup = ["Wallpaper", "org.kde.image", "General"]
+    desktop.writeConfig("FillMode", {})
+}}"#,
+        match mode {
+            Mode::Center => 6,
+            Mode::Crop => 2,
+            Mode::Fit => 1,
+            Mode::Span => 2,
+            Mode::Stretch => 0,
+            Mode::Tile => 3,
+        }
+    ))
+}
+
+fn eval(script: &str) -> Result<()> {
     run(
         "qdbus",
         &[
             "org.kde.plasmashell",
             "/PlasmaShell",
             "org.kde.PlasmaShell.evaluateScript",
-            &format!(
-                r#"
-const monitors = desktops()
-for (var i = 0; i < monitors.length; i++) {{
-    monitors[i].currentConfigGroup = ["Wallpaper"]
-    monitors[i].writeConfig("Image", {})
-}}"#,
-                enquote::enquote('"', &format!("file://{}", path)),
-            ),
+            script,
         ],
     )
 }
