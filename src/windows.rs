@@ -73,6 +73,7 @@ pub fn set_mode(mode: Mode) -> Result<()> {
         .to_string(),
     )?;
 
+    // copied from https://searchfox.org/mozilla-central/rev/5e955a47c4af398e2a859b34056017764e7a2252/browser/components/shell/nsWindowsShellService.cpp#493
     desktop.set_value(
         "WallpaperStyle",
         &match mode {
