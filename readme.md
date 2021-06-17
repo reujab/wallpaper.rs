@@ -13,7 +13,7 @@ The supported desktops are:
 * LXDE
 * MATE
 * Deepin
-* i3 (set only)
+* i3 (set only, requires feh)
 
 ## Example
 ```rust
