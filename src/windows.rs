@@ -76,6 +76,7 @@ pub fn set_mode(mode: Mode) -> Result<()> {
     desktop.set_value(
         "WallpaperStyle",
         &match mode {
+            // does not work with integers
             Mode::Center | Mode::Tile => "0",
             Mode::Fit => "6",
             Mode::Span => "22",
