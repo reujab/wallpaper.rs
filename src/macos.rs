@@ -21,7 +21,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
         &[
             "-e",
             &format!(
-                r#"tell application "Finder" to set desktop picture to POSIX file {}"#,
+                r#"tell application "System Events" to tell every desktop to set picture to {}"#,
                 enquote::enquote('"', path),
             ),
         ],
