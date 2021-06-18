@@ -27,3 +27,8 @@ pub fn set_from_path(path: &str) -> Result<()> {
         ],
     )
 }
+
+/// No-op. Unable to change with AppleScript.
+pub fn set_mode(_: Mode) -> Result<()> {
+    Ok(())
+}
