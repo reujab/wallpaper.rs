@@ -6,11 +6,11 @@ mod xfce;
 use crate::{run, Mode, Result};
 use enquote;
 use get_stdout;
-use std::env;
+use std::{env, process::Command};
 
 /// Returns the wallpaper of the current desktop.
 pub fn get() -> Result<String> {
-    let desktop = env::var("XDG_CURRENT_DESKTOP")?;
+    let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or(Default::default());
 
     if gnome::is_compliant(&desktop) {
         return gnome::get();
@@ -41,7 +41,7 @@ pub fn get() -> Result<String> {
 
 /// Sets the wallpaper for the current desktop from a file path.
 pub fn set_from_path(path: &str) -> Result<()> {
-    let desktop = env::var("XDG_CURRENT_DESKTOP")?;
+    let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or(Default::default());
 
     if gnome::is_compliant(&desktop) {
         return gnome::set(path);
@@ -75,12 +75,20 @@ pub fn set_from_path(path: &str) -> Result<()> {
                 &enquote::enquote('"', &format!("file://{}", path)),
             ],
         ),
-        _ => run("feh", &["--bg-fill", &path]),
+        _ => {
+            if let Ok(mut child) = Command::new("swaybg").args(&["-i", path]).spawn() {
+                child.stdout = None;
+                child.stderr = None;
+                return Ok(());
+            }
+
+            return run("feh", &["--bg-fill", path]);
+        }
     }
 }
 
 pub fn set_mode(mode: Mode) -> Result<()> {
-    let desktop = env::var("XDG_CURRENT_DESKTOP")?;
+    let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or(Default::default());
 
     if gnome::is_compliant(&desktop) {
         return gnome::set_mode(mode);
