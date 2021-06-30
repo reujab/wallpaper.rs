@@ -21,6 +21,7 @@
 //! fn main() {
 //!     println!("{:?}", wallpaper::get());
 //!     wallpaper::set_from_path("/usr/share/backgrounds/gnome/Tree.jpg").unwrap();
+//!     wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
 //!     println!("{:?}", wallpaper::get());
 //! }
 //! ```
