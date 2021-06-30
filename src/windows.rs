@@ -82,7 +82,7 @@ pub fn set_mode(mode: Mode) -> Result<()> {
             Mode::Fit => "6",
             Mode::Span => "22",
             Mode::Stretch => "2",
-            Mode::Zoom => "10",
+            Mode::Crop => "10",
         }
         .to_string(),
     )?;
