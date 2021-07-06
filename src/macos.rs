@@ -2,6 +2,7 @@ use enquote;
 use get_stdout;
 use run;
 use Result;
+use Mode;
 
 /// Returns the current wallpaper.
 pub fn get() -> Result<String> {
