@@ -13,7 +13,7 @@ use download_image;
 
 /// Returns the wallpaper of the current desktop.
 pub fn get() -> Result<String> {
-    let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or(Default::default());
+    let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or_default();
 
     if gnome::is_compliant(&desktop) {
         return gnome::get();
@@ -44,7 +44,7 @@ pub fn get() -> Result<String> {
 
 /// Sets the wallpaper for the current desktop from a file path.
 pub fn set_from_path(path: &str) -> Result<()> {
-    let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or(Default::default());
+    let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or_default();
 
     if gnome::is_compliant(&desktop) {
         return gnome::set(path);
@@ -85,7 +85,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
                 return Ok(());
             }
 
-            return run("feh", &["--bg-fill", path]);
+            run("feh", &["--bg-fill", path])
         }
     }
 }
@@ -115,7 +115,7 @@ pub fn set_from_url(url: &str) -> Result<()> {
 }
 
 pub fn set_mode(mode: Mode) -> Result<()> {
-    let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or(Default::default());
+    let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or_default();
 
     if gnome::is_compliant(&desktop) {
         return gnome::set_mode(mode);
