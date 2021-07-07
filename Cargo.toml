@@ -11,6 +11,8 @@ license = "Unlicense"
 
 [target.'cfg(any(unix, windows))'.dependencies]
 dirs = "1.0"
+reqwest = { version = "0.11", optional = true, features = ["blocking"]}
+url = { version = "2.2", optional = true }
 
 [target.'cfg(unix)'.dependencies]
 enquote = "1"
@@ -21,3 +23,6 @@ rust-ini = "0.12"
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["winuser"] }
 winreg = "0.9"
+
+[features]
+from_url = ["reqwest", "url"]
