@@ -28,19 +28,6 @@
 
 use std::error::Error;
 
-// i really wish you could group multiple lines using a single #[cfg]
-
-// common
-#[cfg(any(unix, windows))]
-extern crate dirs;
-
-#[cfg(feature = "from_url")]
-#[cfg(any(unix, windows))]
-extern crate reqwest;
-
-#[cfg(feature = "from_url")]
-#[cfg(any(unix, windows))]
-extern crate url;
 
 #[cfg(feature = "from_url")]
 #[cfg(any(unix, windows))]
@@ -49,14 +36,6 @@ use std::fs::File;
 #[cfg(feature = "from_url")]
 #[cfg(any(unix, windows))]
 use url::Url;
-
-// unix
-#[cfg(unix)]
-extern crate enquote;
-
-// linux and *bsd
-#[cfg(all(unix, not(target_os = "macos")))]
-extern crate ini;
 
 #[cfg(all(unix, not(target_os = "macos")))]
 mod linux;
@@ -70,13 +49,6 @@ mod macos;
 
 #[cfg(target_os = "macos")]
 pub use macos::*;
-
-// windows
-#[cfg(windows)]
-extern crate winapi;
-
-#[cfg(windows)]
-extern crate winreg;
 
 #[cfg(windows)]
 mod windows;
