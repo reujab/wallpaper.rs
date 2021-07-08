@@ -1,7 +1,4 @@
-use crate::get_stdout;
-use crate::run;
-use crate::Mode;
-use crate::Result;
+use crate::{get_stdout, run, Mode, Result};
 
 #[cfg(feature = "from_url")]
 use crate::download_image;
@@ -34,7 +31,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
 #[cfg(feature = "from_url")]
 // Sets the wallpaper from a URL.
 pub fn set_from_url(url: &str) -> Result<()> {
-    let path = download_image(&url.parse()?)?;
+    let path = download_image(url)?;
     set_from_path(&path)
 }
 

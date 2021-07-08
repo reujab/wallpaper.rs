@@ -30,12 +30,7 @@
 use std::error::Error;
 
 #[cfg(feature = "from_url")]
-#[cfg(any(unix, windows))]
 use std::fs::File;
-
-#[cfg(feature = "from_url")]
-#[cfg(any(unix, windows))]
-use url::Url;
 
 #[cfg(all(unix, not(target_os = "macos")))]
 mod linux;
@@ -76,20 +71,14 @@ pub enum Mode {
 }
 
 #[cfg(feature = "from_url")]
-#[cfg(any(unix, windows))]
-fn download_image(url: &Url) -> Result<String> {
+fn download_image(url: &str) -> Result<String> {
     let cache_dir = dirs::cache_dir().ok_or("no cache dir")?;
-    let segments = url.path_segments().ok_or("no path segments")?;
-    let mut file_name = segments.last().ok_or("no file name")?;
-    if file_name.is_empty() {
-        file_name = "wallpaper";
-    }
-    let file_path = cache_dir.join(file_name);
+    let file_path = cache_dir.join("wallpaper");
 
     let mut file = File::create(&file_path)?;
-    reqwest::blocking::get(url.as_str())?.copy_to(&mut file)?;
+    reqwest::blocking::get(url)?.copy_to(&mut file)?;
 
-    Ok(file_path.to_str().to_owned().unwrap().into())
+    Ok(file_path.to_str().to_owned().ok_or("no file path")?.into())
 }
 
 #[cfg(unix)]
@@ -112,6 +101,5 @@ fn get_stdout(command: &str, args: &[&str]) -> Result<String> {
 #[cfg(unix)]
 #[inline]
 fn run(command: &str, args: &[&str]) -> Result<()> {
-    get_stdout(command, args)?;
-    Ok(())
+    get_stdout(command, args).map(|_| ())
 }

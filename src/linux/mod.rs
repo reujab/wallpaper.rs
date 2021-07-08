@@ -3,8 +3,7 @@ mod kde;
 mod lxde;
 mod xfce;
 
-use crate::get_stdout;
-use crate::{run, Mode, Result};
+use crate::{get_stdout, run, Mode, Result};
 use std::{env, process::Command};
 
 #[cfg(feature = "from_url")]
@@ -92,7 +91,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
 #[cfg(feature = "from_url")]
 /// Sets the wallpaper for the current desktop from a URL.
 pub fn set_from_url(url: &str) -> Result<()> {
-    let path = download_image(&url.parse()?)?;
+    let path = download_image(url)?;
     set_from_path(&path)
 }
 

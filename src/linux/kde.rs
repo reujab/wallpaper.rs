@@ -1,7 +1,8 @@
 use crate::{run, Mode, Result};
-use std::fs::File;
-use std::io::BufRead;
-use std::io::BufReader;
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+};
 
 /// Returns the wallpaper of KDE.
 pub fn get() -> Result<String> {
