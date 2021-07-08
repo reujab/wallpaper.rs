@@ -28,13 +28,14 @@ fn main() {
     println!("{:?}", wallpaper::get());
     // Sets the wallpaper for the current desktop from a file path.
     wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
+    // Sets the wallpaper style.
     wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
     // Returns the wallpaper of the current desktop.
     println!("{:?}", wallpaper::get());
 }
 ```
 
-Make sure you activated the `from_url` feature of the wallpaper crate on Cargo.toml:
+If you want to set an image as background via an URL, make sure you activated the `from_url` feature of the wallpaper crate on Cargo.toml:
 
 ```toml
 [dependencies]
