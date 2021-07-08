@@ -9,7 +9,7 @@ use crate::get_stdout;
 use std::{env, process::Command};
 
 #[cfg(feature = "from_url")]
-use download_image;
+use crate::download_image;
 
 /// Returns the wallpaper of the current desktop.
 pub fn get() -> Result<String> {
