@@ -1,11 +1,10 @@
-use enquote;
-use get_stdout;
-use run;
-use Mode;
-use Result;
+use crate::get_stdout;
+use crate::run;
+use crate::Mode;
+use crate::Result;
 
 #[cfg(feature = "from_url")]
-use download_image;
+use crate::download_image;
 
 /// Returns the current wallpaper.
 pub fn get() -> Result<String> {
