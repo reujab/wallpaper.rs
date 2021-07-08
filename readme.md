@@ -16,14 +16,30 @@ The supported desktops are:
 * Most Wayland compositors (set only, requires swaybg)
 * i3 (set only, requires feh)
 
-## Example
+## Examples
 ```rust
-extern crate wallpaper;
+use wallpaper;
 
 fn main() {
-    println!("{:?}", wallpaper::get().unwrap());
+    // Returns the wallpaper of the current desktop.
+    println!("{:?}", wallpaper::get());
+    // Sets the wallpaper for the current desktop from a file path.
     wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
+    // Returns the wallpaper of the current desktop.
+    println!("{:?}", wallpaper::get());
+}
+```
+```rust
+use wallpaper;
+
+fn main() {
+    // Returns the wallpaper of the current desktop.
+    println!("{:?}", wallpaper::get());
+    // Sets the wallpaper for the current desktop from a URL.
+    wallpaper::set_from_url("https://source.unsplash.com/random").unwrap();
+
     wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
-    println!("{:?}", wallpaper::get().unwrap());
+    // Returns the wallpaper of the current desktop.
+    println!("{:?}", wallpaper::get());
 }
 ```
