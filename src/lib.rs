@@ -12,41 +12,36 @@
 //! * LXDE
 //! * MATE
 //! * Deepin
-//! * i3 (set only)
+//! * Most Wayland compositors (set only, requires swaybg)
+//! * i3 (set only, requires feh)
 //!
-//! # Examples
+//! # Example
 //! ```
-//! extern crate wallpaper;
+//! use wallpaper;
 //!
-//! fn main() {
-//!     println!("{:?}", wallpaper::get());
-//!     wallpaper::set_from_path("/usr/share/backgrounds/gnome/Tree.jpg").unwrap();
-//!     wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
-//!     println!("{:?}", wallpaper::get());
-//! }
+//!fn main() {
+//!    println!("{:?}", wallpaper::get());
+//!    wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
+//!    wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
+//!    println!("{:?}", wallpaper::get());
+//!}
 //! ```
 
 use std::error::Error;
 
-// i really wish you could group multiple lines using a single #[cfg]
-
-// common
+#[cfg(feature = "from_url")]
 #[cfg(any(unix, windows))]
-extern crate dirs;
+use std::fs::File;
 
-// unix
-#[cfg(unix)]
-extern crate enquote;
-
-// linux and *bsd
-#[cfg(all(unix, not(target_os = "macos")))]
-extern crate ini;
+#[cfg(feature = "from_url")]
+#[cfg(any(unix, windows))]
+use url::Url;
 
 #[cfg(all(unix, not(target_os = "macos")))]
 mod linux;
 
 #[cfg(all(unix, not(target_os = "macos")))]
-pub use linux::*;
+pub use crate::linux::*;
 
 // macos
 #[cfg(target_os = "macos")]
@@ -54,13 +49,6 @@ mod macos;
 
 #[cfg(target_os = "macos")]
 pub use macos::*;
-
-// windows
-#[cfg(windows)]
-extern crate winapi;
-
-#[cfg(windows)]
-extern crate winreg;
 
 #[cfg(windows)]
 mod windows;
@@ -85,6 +73,23 @@ pub enum Mode {
     Span,
     Stretch,
     Tile,
+}
+
+#[cfg(feature = "from_url")]
+#[cfg(any(unix, windows))]
+fn download_image(url: &Url) -> Result<String> {
+    let cache_dir = dirs::cache_dir().ok_or("no cache dir")?;
+    let segments = url.path_segments().ok_or("no path segments")?;
+    let mut file_name = segments.last().ok_or("no file name")?;
+    if file_name.is_empty() {
+        file_name = "wallpaper";
+    }
+    let file_path = cache_dir.join(file_name);
+
+    let mut file = File::create(&file_path)?;
+    reqwest::blocking::get(url.as_str())?.copy_to(&mut file)?;
+
+    Ok(file_path.to_str().to_owned().unwrap().into())
 }
 
 #[cfg(unix)]

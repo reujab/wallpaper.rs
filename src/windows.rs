@@ -13,6 +13,9 @@ use winapi::um::winuser::SPI_SETDESKWALLPAPER;
 use winreg::enums::*;
 use winreg::RegKey;
 
+#[cfg(feature = "from_url")]
+use crate::download_image;
+
 /// Returns the current wallpaper.
 pub fn get() -> Result<String> {
     unsafe {
@@ -27,7 +30,7 @@ pub fn get() -> Result<String> {
         if successful {
             let path = String::from_utf16(&buffer)?
                 // removes trailing zeroes from buffer
-                .trim_right_matches('\x00')
+                .trim_end_matches('\x00')
                 .into();
             Ok(path)
         } else {
@@ -57,6 +60,13 @@ pub fn set_from_path(path: &str) -> Result<()> {
             Err(io::Error::last_os_error().into())
         }
     }
+}
+
+/// Sets the wallpaper from a URL.
+#[cfg(feature = "from_url")]
+pub fn set_from_url(url: &str) -> Result<()> {
+    let path = download_image(&url.parse()?)?;
+    set_from_path(&path)
 }
 
 /// Sets the wallpaper style.

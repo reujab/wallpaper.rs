@@ -1,8 +1,10 @@
-use enquote;
-use get_stdout;
-use run;
-use Result;
-use Mode;
+use crate::get_stdout;
+use crate::run;
+use crate::Mode;
+use crate::Result;
+
+#[cfg(feature = "from_url")]
+use crate::download_image;
 
 /// Returns the current wallpaper.
 pub fn get() -> Result<String> {
@@ -27,6 +29,13 @@ pub fn set_from_path(path: &str) -> Result<()> {
             ),
         ],
     )
+}
+
+#[cfg(feature = "from_url")]
+// Sets the wallpaper from a URL.
+pub fn set_from_url(url: &str) -> Result<()> {
+    let path = download_image(&url.parse()?)?;
+    set_from_path(&path)
 }
 
 /// No-op. Unable to change with AppleScript.

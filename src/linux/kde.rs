@@ -1,6 +1,4 @@
 use crate::{run, Mode, Result};
-use dirs;
-use enquote;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
@@ -14,8 +12,8 @@ pub fn get() -> Result<String> {
     let reader = BufReader::new(file);
     for line in reader.lines() {
         let line = line?;
-        if line.starts_with("Image=") {
-            let mut uri = line[6..].trim();
+        if let Some(end) = line.strip_prefix("Image=") {
+            let mut uri = end.trim();
             if uri.starts_with("file://") {
                 uri = &uri[7..];
             }
