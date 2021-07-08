@@ -37,5 +37,5 @@ pub fn set_from_url(url: &str) -> Result<()> {
 
 /// No-op. Unable to change with AppleScript.
 pub fn set_mode(_: Mode) -> Result<()> {
-    Ok(())
+    Err("unsupported on macos".into())
 }
