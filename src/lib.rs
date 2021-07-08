@@ -28,7 +28,6 @@
 
 use std::error::Error;
 
-
 #[cfg(feature = "from_url")]
 #[cfg(any(unix, windows))]
 use std::fs::File;

@@ -1,5 +1,4 @@
 use crate::{run, Mode, Result};
-use dirs;
 use ini::Ini;
 use std::env;
 

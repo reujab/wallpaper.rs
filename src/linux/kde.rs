@@ -1,6 +1,4 @@
 use crate::{run, Mode, Result};
-use dirs;
-use enquote;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;

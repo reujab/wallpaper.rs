@@ -3,9 +3,8 @@ mod kde;
 mod lxde;
 mod xfce;
 
-use crate::{run, Mode, Result};
-use enquote;
 use crate::get_stdout;
+use crate::{run, Mode, Result};
 use std::{env, process::Command};
 
 #[cfg(feature = "from_url")]
