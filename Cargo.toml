@@ -1,6 +1,7 @@
 [package]
 name = "wallpaper"
 version = "3.1.1"
+edition = "2018"
 authors = ["reujab <reujab@gmail.com>"]
 description = "Gets and sets the desktop wallpaper/background."
 repository = "https://github.com/reujab/wallpaper.rs"

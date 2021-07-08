@@ -62,7 +62,7 @@ extern crate ini;
 mod linux;
 
 #[cfg(all(unix, not(target_os = "macos")))]
-pub use linux::*;
+pub use crate::linux::*;
 
 // macos
 #[cfg(target_os = "macos")]

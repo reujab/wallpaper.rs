@@ -5,7 +5,7 @@ mod xfce;
 
 use crate::{run, Mode, Result};
 use enquote;
-use get_stdout;
+use crate::get_stdout;
 use std::{env, process::Command};
 
 #[cfg(feature = "from_url")]
