@@ -14,7 +14,7 @@ use winreg::enums::*;
 use winreg::RegKey;
 
 #[cfg(feature = "from_url")]
-use download_image;
+use crate::download_image;
 
 /// Returns the current wallpaper.
 pub fn get() -> Result<String> {
@@ -30,7 +30,7 @@ pub fn get() -> Result<String> {
         if successful {
             let path = String::from_utf16(&buffer)?
                 // removes trailing zeroes from buffer
-                .trim_right_matches('\x00')
+                .trim_end_matches('\x00')
                 .into();
             Ok(path)
         } else {
