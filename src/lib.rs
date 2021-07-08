@@ -12,18 +12,19 @@
 //! * LXDE
 //! * MATE
 //! * Deepin
-//! * i3 (set only)
+//! * Most Wayland compositors (set only, requires swaybg)
+//! * i3 (set only, requires feh)
 //!
-//! # Examples
+//! # Example
 //! ```
-//! extern crate wallpaper;
+//! use wallpaper;
 //!
-//! fn main() {
-//!     println!("{:?}", wallpaper::get());
-//!     wallpaper::set_from_path("/usr/share/backgrounds/gnome/Tree.jpg").unwrap();
-//!     wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
-//!     println!("{:?}", wallpaper::get());
-//! }
+//!fn main() {
+//!    println!("{:?}", wallpaper::get());
+//!    wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
+//!    wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
+//!    println!("{:?}", wallpaper::get());
+//!}
 //! ```
 
 use std::error::Error;

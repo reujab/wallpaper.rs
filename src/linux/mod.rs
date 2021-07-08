@@ -113,6 +113,7 @@ pub fn set_from_url(url: &str) -> Result<()> {
     }
 }
 
+/// Sets the wallpaper style.
 pub fn set_mode(mode: Mode) -> Result<()> {
     let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or_default();
 
