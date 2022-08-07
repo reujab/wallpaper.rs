@@ -66,7 +66,12 @@ where
             &[
                 "write",
                 "/org/mate/desktop/background/picture-filename",
-                &enquote::enquote('"', path.as_ref().to_str().unwrap()),
+                &enquote::enquote(
+                    '"',
+                    path.as_ref()
+                        .to_str()
+                        .ok_or("invalid path, perhaps it's wrong?")?,
+                ),
             ],
         ),
         "XFCE" => xfce::set(path),
@@ -81,7 +86,12 @@ where
         ),
         _ => {
             if let Ok(mut child) = Command::new("swaybg")
-                .args(&["-i", path.as_ref().to_str().unwrap()])
+                .args(&[
+                    "-i",
+                    path.as_ref()
+                        .to_str()
+                        .ok_or("invalid path, perhaps it's wrong?")?,
+                ])
                 .spawn()
             {
                 child.stdout = None;
@@ -89,7 +99,15 @@ where
                 return Ok(());
             }
 
-            run("feh", &["--bg-fill", path.as_ref().to_str().unwrap()])
+            run(
+                "feh",
+                &[
+                    "--bg-fill",
+                    path.as_ref()
+                        .to_str()
+                        .ok_or("invalid path, perhaps it's wrong?")?,
+                ],
+            )
         }
     }
 }
