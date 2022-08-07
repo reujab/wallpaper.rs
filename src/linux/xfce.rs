@@ -1,5 +1,5 @@
 use crate::{get_stdout, run, Mode, Result};
-use std::error::Error;
+use std::{error::Error, path::Path};
 
 #[derive(Debug)]
 struct NoDesktopsError;
@@ -37,7 +37,10 @@ pub fn get() -> Result<String> {
     Ok(path.trim().to_string())
 }
 
-pub fn set(path: &str) -> Result<()> {
+pub fn set<P>(path: P) -> Result<()>
+where
+    P: AsRef<Path> + std::fmt::Display,
+{
     for desktop in get_desktop_props("last-image")? {
         run(
             "xfconf-query",
@@ -47,7 +50,10 @@ pub fn set(path: &str) -> Result<()> {
                 "--property",
                 &desktop,
                 "--set",
-                path,
+                match path.as_ref().to_str() {
+                    Some(it) => it,
+                    None => return Err(Box::new(NoDesktopsError)),
+                },
             ],
         )?;
     }

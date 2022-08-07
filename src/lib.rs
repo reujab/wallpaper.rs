@@ -19,12 +19,10 @@
 //! ```
 //! use wallpaper;
 //!
-//!fn main() {
-//!    println!("{:?}", wallpaper::get());
-//!    wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
-//!    wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
-//!    println!("{:?}", wallpaper::get());
-//!}
+//!println!("{:?}", wallpaper::get());
+//!wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
+//!wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
+//!println!("{:?}", wallpaper::get());
 //! ```
 
 use std::error::Error;

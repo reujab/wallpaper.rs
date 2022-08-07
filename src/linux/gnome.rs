@@ -13,8 +13,11 @@ pub fn get() -> Result<String> {
     )
 }
 
-pub fn set(path: &str) -> Result<()> {
-    let uri = enquote::enquote('"', &format!("file://{}", path));
+pub fn set<P>(path: P) -> Result<()>
+where
+    P: AsRef<std::path::Path> + std::fmt::Display,
+{
+    let uri = enquote::enquote('"', &format!("file://{}", &path));
     run(
         "gsettings",
         &["set", "org.gnome.desktop.background", "picture-uri", &uri],

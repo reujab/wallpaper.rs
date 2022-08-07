@@ -4,7 +4,7 @@ mod lxde;
 mod xfce;
 
 use crate::{get_stdout, run, Mode, Result};
-use std::{env, process::Command};
+use std::{env, path::Path, process::Command};
 
 #[cfg(feature = "from_url")]
 use crate::download_image;
@@ -41,21 +41,24 @@ pub fn get() -> Result<String> {
 }
 
 /// Sets the wallpaper for the current desktop from a file path.
-pub fn set_from_path(path: &str) -> Result<()> {
+pub fn set_from_path<P>(path: P) -> Result<()>
+where
+    P: AsRef<Path> + std::fmt::Display,
+{
     let desktop = env::var("XDG_CURRENT_DESKTOP").unwrap_or_default();
 
     if gnome::is_compliant(&desktop) {
-        return gnome::set(path);
+        return gnome::set(&path);
     }
 
     match desktop.as_str() {
-        "KDE" => kde::set(path),
+        "KDE" => kde::set(&path),
         "X-Cinnamon" => run(
             "dconf",
             &[
                 "write",
                 "/org/cinnamon/desktop/background/picture-uri",
-                &enquote::enquote('"', &format!("file://{}", path)),
+                &enquote::enquote('"', &format!("file://{}", &path)),
             ],
         ),
         "MATE" => run(
@@ -63,7 +66,7 @@ pub fn set_from_path(path: &str) -> Result<()> {
             &[
                 "write",
                 "/org/mate/desktop/background/picture-filename",
-                &enquote::enquote('"', &path),
+                &enquote::enquote('"', path.as_ref().to_str().unwrap()),
             ],
         ),
         "XFCE" => xfce::set(path),
@@ -73,17 +76,20 @@ pub fn set_from_path(path: &str) -> Result<()> {
             &[
                 "write",
                 "/com/deepin/wrap/gnome/desktop/background/picture-uri",
-                &enquote::enquote('"', &format!("file://{}", path)),
+                &enquote::enquote('"', &format!("file://{}", &path)),
             ],
         ),
         _ => {
-            if let Ok(mut child) = Command::new("swaybg").args(&["-i", path]).spawn() {
+            if let Ok(mut child) = Command::new("swaybg")
+                .args(&["-i", path.as_ref().to_str().unwrap()])
+                .spawn()
+            {
                 child.stdout = None;
                 child.stderr = None;
                 return Ok(());
             }
 
-            run("feh", &["--bg-fill", path])
+            run("feh", &["--bg-fill", path.as_ref().to_str().unwrap()])
         }
     }
 }
