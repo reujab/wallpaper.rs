@@ -1,4 +1,4 @@
-use crate::{run, Mode, Result};
+use crate::{run, Mode, Result, Error};
 use ini::Ini;
 use std::env;
 
@@ -6,14 +6,13 @@ pub fn get() -> Result<String> {
     // DESKTOP_SESSION in used on Raspbian
     let session = env::var("DESKTOP_SESSION").unwrap_or_else(|_| "LXDE".into());
     let path = dirs::config_dir()
-        .ok_or("could not find config directory")?
+        .ok_or(Error::NoConfigDir)?
         .join(format!("pcmanfm/{}/desktop-items-0.conf", session));
     let ini = Ini::load_from_file(path)?;
     Ok(ini
         .section(Some("*"))
-        .ok_or("no '*' section found")?
-        .get("wallpaper")
-        .ok_or("no lxde image found")?
+        .and_then(|ini| ini.get("wallpaper"))
+        .ok_or(Error::NoImage("LXDE"))?
         .clone())
 }
 

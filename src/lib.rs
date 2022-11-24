@@ -19,15 +19,16 @@
 //! ```
 //! use wallpaper;
 //!
-//!fn main() {
-//!    println!("{:?}", wallpaper::get());
-//!    wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
-//!    wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
-//!    println!("{:?}", wallpaper::get());
-//!}
+//! fn main() {
+//!     println!("{:?}", wallpaper::get());
+//!     wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
+//!     wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
+//!     println!("{:?}", wallpaper::get());
+//! }
 //! ```
 
-use std::error::Error;
+mod error;
+pub use error::Error;
 
 #[cfg(all(unix, not(target_os = "macos")))]
 mod linux;
@@ -62,7 +63,7 @@ mod from_url;
 #[cfg(feature = "from_url")]
 pub(crate) use from_url::download_image;
 
-type Result<T> = std::result::Result<T, Box<dyn Error>>;
+type Result<T, E = Error> = std::result::Result<T, E>;
 
 #[derive(Clone, Debug)]
 pub enum Mode {
@@ -82,12 +83,7 @@ fn get_stdout(command: &str, args: &[&str]) -> Result<String> {
     if output.status.success() {
         Ok(String::from_utf8(output.stdout)?.trim().into())
     } else {
-        Err(format!(
-            "{} exited with status code {}",
-            command,
-            output.status.code().unwrap_or(-1),
-        )
-        .into())
+        Err(Error::CommandFailed { command: command.to_string(), code: output.status.code().unwrap_or(-1) })
     }
 }
 
