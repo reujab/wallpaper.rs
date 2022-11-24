@@ -3,7 +3,7 @@ mod kde;
 mod lxde;
 pub(crate) mod xfce;
 
-use crate::{get_stdout, run, Mode, Result, Error};
+use crate::{get_stdout, run, Error, Mode, Result};
 use std::{env, process::Command};
 
 #[cfg(feature = "from_url")]

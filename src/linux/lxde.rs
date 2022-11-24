@@ -1,4 +1,4 @@
-use crate::{run, Mode, Result, Error};
+use crate::{run, Error, Mode, Result};
 use ini::Ini;
 use std::env;
 

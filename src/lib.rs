@@ -83,7 +83,10 @@ fn get_stdout(command: &str, args: &[&str]) -> Result<String> {
     if output.status.success() {
         Ok(String::from_utf8(output.stdout)?.trim().into())
     } else {
-        Err(Error::CommandFailed { command: command.to_string(), code: output.status.code().unwrap_or(-1) })
+        Err(Error::CommandFailed {
+            command: command.to_string(),
+            code: output.status.code().unwrap_or(-1),
+        })
     }
 }
 
