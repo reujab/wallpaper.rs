@@ -12,12 +12,11 @@ license = "Unlicense"
 
 [dependencies]
 dirs = { version = "1", optional = true }
+enquote = "1"
 rust-ini = "0.12"
 thiserror = "1"
 reqwest = { version = "0.11", optional = true, features = ["blocking"] }
 
-[target.'cfg(unix)'.dependencies]
-enquote = "1"
 
 [target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
 dirs = "1"

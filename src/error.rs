@@ -1,4 +1,4 @@
-use std::{io, string::FromUtf8Error};
+use std::{io, string::FromUtf8Error, string::FromUtf16Error};
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -8,7 +8,10 @@ pub enum Error {
     IOError(#[from] io::Error),
 
     #[error("Invalid UTF-8: {0}")]
-    InvalidUtf8(#[from] FromUtf8Error),
+    InvalidUtf8_8(#[from] FromUtf8Error),
+
+    #[error("Invalid UTF-8: {0}")]
+    InvalidUtf8_16(#[from] FromUtf16Error),
 
     #[error("Invalid INI: {0}")]
     InvalidIni(#[from] ini::ini::Error),
