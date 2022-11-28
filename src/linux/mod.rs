@@ -1,9 +1,9 @@
 mod gnome;
 mod kde;
 mod lxde;
-mod xfce;
+pub(crate) mod xfce;
 
-use crate::{get_stdout, run, Mode, Result};
+use crate::{get_stdout, run, Error, Mode, Result};
 use std::{env, path::Path, process::Command};
 
 #[cfg(feature = "from_url")]
@@ -36,7 +36,7 @@ pub fn get() -> Result<String> {
                 "/com/deepin/wrap/gnome/desktop/background/picture-uri",
             ],
         ),
-        _ => Err("unsupported desktop".into()),
+        _ => Err(Error::UnsupportedDesktop),
     }
 }
 
@@ -155,7 +155,7 @@ pub fn set_mode(mode: Mode) -> Result<()> {
                 &mode.get_gnome_string(),
             ],
         ),
-        _ => Err("unsupported desktop".into()),
+        _ => Err(Error::UnsupportedDesktop),
     }
 }
 

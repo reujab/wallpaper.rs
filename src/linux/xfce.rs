@@ -2,7 +2,7 @@ use crate::{get_stdout, run, Mode, Result};
 use std::{error::Error, path::Path};
 
 #[derive(Debug)]
-struct NoDesktopsError;
+pub struct NoDesktopsError;
 
 impl Error for NoDesktopsError {}
 
@@ -21,7 +21,7 @@ fn get_desktop_props(key: &str) -> Result<Vec<String>> {
         .collect::<Vec<String>>();
 
     if desktops.is_empty() {
-        return Err(Box::new(NoDesktopsError));
+        return Err(NoDesktopsError.into());
     }
 
     Ok(desktops)
