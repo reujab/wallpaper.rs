@@ -22,12 +22,7 @@ where
 {
     run(
         "pcmanfm",
-        &[
-            "-w",
-            path.as_ref()
-                .to_str()
-                .ok_or("invalid path, perhaps it's wrong?")?,
-        ],
+        &["-w", path.as_ref().to_str().ok_or(Error::InvalidPath)?],
     )
 }
 

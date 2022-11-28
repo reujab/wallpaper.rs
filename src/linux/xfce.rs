@@ -1,16 +1,5 @@
-use crate::{get_stdout, run, Mode, Result};
-use std::{error::Error, path::Path};
-
-#[derive(Debug)]
-pub struct NoDesktopsError;
-
-impl Error for NoDesktopsError {}
-
-impl std::fmt::Display for NoDesktopsError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "no desktops found")
-    }
-}
+use crate::{get_stdout, run, Error, Mode, Result};
+use std::path::Path;
 
 fn get_desktop_props(key: &str) -> Result<Vec<String>> {
     let stdout = get_stdout("xfconf-query", &["--channel", "xfce4-desktop", "--list"])?;
@@ -21,7 +10,7 @@ fn get_desktop_props(key: &str) -> Result<Vec<String>> {
         .collect::<Vec<String>>();
 
     if desktops.is_empty() {
-        return Err(NoDesktopsError.into());
+        return Err(Error::XfceNoDesktops);
     }
 
     Ok(desktops)
@@ -52,7 +41,7 @@ where
                 "--set",
                 match path.as_ref().to_str() {
                     Some(it) => it,
-                    None => return Err(Box::new(NoDesktopsError)),
+                    None => return Err(Error::XfceNoDesktops),
                 },
             ],
         )?;
