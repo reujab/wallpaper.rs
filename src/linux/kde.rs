@@ -1,4 +1,4 @@
-use crate::{run, Mode, Result};
+use crate::{run, Error, Mode, Result};
 use std::{
     fs::File,
     io::{BufRead, BufReader},
@@ -7,7 +7,7 @@ use std::{
 /// Returns the wallpaper of KDE.
 pub fn get() -> Result<String> {
     let path = dirs::config_dir()
-        .ok_or("could not find config directory")?
+        .ok_or(Error::NoConfigDir)?
         .join("plasma-org.kde.plasma.desktop-appletsrc");
     let file = File::open(path)?;
     let reader = BufReader::new(file);
@@ -22,7 +22,7 @@ pub fn get() -> Result<String> {
         }
     }
 
-    Err("no kde image found".into())
+    Err(Error::NoImage("KDE"))
 }
 
 /// Sets the wallpaper for KDE.
