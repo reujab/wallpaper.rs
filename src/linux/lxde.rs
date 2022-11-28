@@ -16,8 +16,19 @@ pub fn get() -> Result<String> {
         .clone())
 }
 
-pub fn set(path: &str) -> Result<()> {
-    run("pcmanfm", &["-w", path])
+pub fn set<P>(path: P) -> Result<()>
+where
+    P: AsRef<std::path::Path> + std::fmt::Display,
+{
+    run(
+        "pcmanfm",
+        &[
+            "-w",
+            path.as_ref()
+                .to_str()
+                .ok_or("invalid path, perhaps it's wrong?")?,
+        ],
+    )
 }
 
 pub fn set_mode(mode: Mode) -> Result<()> {

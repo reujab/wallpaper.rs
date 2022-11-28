@@ -26,14 +26,17 @@ pub fn get() -> Result<String> {
 }
 
 /// Sets the wallpaper for KDE.
-pub fn set(path: &str) -> Result<()> {
+pub fn set<P>(path: P) -> Result<()>
+where
+    P: AsRef<std::path::Path> + std::fmt::Display,
+{
     eval(&format!(
         r#"
 for (const desktop of desktops()) {{
     desktop.currentConfigGroup = ["Wallpaper", "org.kde.image", "General"]
     desktop.writeConfig("Image", {})
 }}"#,
-        enquote::enquote('"', &format!("file://{}", path)),
+        enquote::enquote('"', &format!("file://{}", &path)),
     ))
 }
 
