@@ -16,7 +16,7 @@
 //! * i3 (set only, requires feh)
 //!
 //! # Example
-//! ```
+//! ```no_run
 //!println!("{:?}", wallpaper::get());
 //!wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
 //!wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
