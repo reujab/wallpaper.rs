@@ -16,7 +16,7 @@
 //! * i3 (set only, requires feh)
 //!
 //! # Example
-//! ```
+//! ```no_run
 //! use wallpaper;
 //!
 //!fn main() {
