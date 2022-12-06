@@ -15,7 +15,10 @@ pub fn get() -> Result<String> {
 }
 
 // Sets the wallpaper from a file.
-pub fn set_from_path(path: &str) -> Result<()> {
+pub fn set_from_path<P>(path: P) -> Result<()>
+where
+    P: AsRef<Path> + std::fmt::Display,
+{
     run(
         "osascript",
         &[

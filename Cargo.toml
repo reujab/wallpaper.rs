@@ -1,6 +1,6 @@
 [package]
 name = "wallpaper"
-version = "3.2.0"
+version = "4.0.0"
 edition = "2018"
 authors = ["reujab <reujab@gmail.com>"]
 description = "Gets and sets the desktop wallpaper/background."
@@ -12,7 +12,8 @@ license = "Unlicense"
 
 [dependencies]
 dirs = { version = "1", optional = true }
-reqwest = { version = "0.11", optional = true, features = ["blocking"]}
+thiserror = "1"
+reqwest = { version = "0.11", optional = true, features = ["blocking"] }
 
 [target.'cfg(unix)'.dependencies]
 enquote = "1"

@@ -13,12 +13,27 @@ pub fn get() -> Result<String> {
     )
 }
 
-pub fn set(path: &str) -> Result<()> {
-    let uri = enquote::enquote('"', &format!("file://{}", path));
-    run(
+pub fn set<P>(path: P) -> Result<()>
+where
+    P: AsRef<std::path::Path> + std::fmt::Display,
+{
+    let uri = enquote::enquote('"', &format!("file://{}", &path));
+    let res = run(
         "gsettings",
         &["set", "org.gnome.desktop.background", "picture-uri", &uri],
+    );
+    run(
+        "gsettings",
+        &[
+            "set",
+            "org.gnome.desktop.background",
+            "picture-uri-dark",
+            &uri,
+        ],
     )
+    // Ignore the result because in Gnome < 42 the cmd could fail since
+    // key "picture-uri-dark" does not exists
+    .or_else(|_| res)
 }
 
 pub fn set_mode(mode: Mode) -> Result<()> {
