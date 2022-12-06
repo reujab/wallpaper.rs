@@ -13,9 +13,11 @@ pub enum Error {
     #[error("Invalid UTF-8: {0}")]
     InvalidUtf8_16(#[from] FromUtf16Error),
 
+    #[cfg(all(unix, not(target_os = "macos")))]
     #[error("Invalid INI: {0}")]
     InvalidIni(#[from] ini::ini::Error),
 
+    #[cfg(unix)]
     #[error("Enquote error: {0}")]
     Enquote(#[from] enquote::Error),
 
