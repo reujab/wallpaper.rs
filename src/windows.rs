@@ -42,11 +42,15 @@ pub fn get() -> Result<String> {
 /// Sets the wallpaper from a file.
 pub fn set_from_path(path: &str) -> Result<()> {
     unsafe {
-        let path = OsStr::new(path)
+        let path = std::fs::canonicalize(path)?;
+
+        let path = path
+            .as_os_str()
             .encode_wide()
             // append null byte
             .chain(iter::once(0))
             .collect::<Vec<u16>>();
+
         let successful = SystemParametersInfoW(
             SPI_SETDESKWALLPAPER,
             0,
