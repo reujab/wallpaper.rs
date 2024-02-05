@@ -1,4 +1,4 @@
-use crate::{get_stdout, run, Mode, Result};
+use crate::{get_stdout, run, Error::UnsupportedDesktop, Mode, Result};
 
 #[cfg(feature = "from_url")]
 use crate::download_image;
@@ -40,5 +40,5 @@ pub fn set_from_url(url: &str) -> Result<()> {
 
 /// No-op. Unable to change with AppleScript.
 pub fn set_mode(_: Mode) -> Result<()> {
-    Err("unsupported on macos".into())
+    Err(UnsupportedDesktop)
 }
