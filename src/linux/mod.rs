@@ -79,24 +79,8 @@ where
                 &enquote::enquote('"', &format!("file://{}", &path)),
             ],
         ),
-        _ => {
-            if let Ok(mut child) = Command::new("swaybg")
-                .args(&["-i", path.as_ref().to_str().ok_or(Error::InvalidPath)?])
-                .spawn()
-            {
-                child.stdout = None;
-                child.stderr = None;
-                return Ok(());
-            }
-
-            run(
-                "feh",
-                &[
-                    "--bg-fill",
-                    path.as_ref().to_str().ok_or(Error::InvalidPath)?,
-                ],
-            )
-        }
+        _ => wlrs::set_from_path(path.as_ref().to_str().ok_or(Error::InvalidPath)?)
+            .map_err(|_| Error::UnsupportedDesktop),
     }
 }
 

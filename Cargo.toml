@@ -14,6 +14,7 @@ license = "Unlicense"
 dirs = { version = "1", optional = true }
 thiserror = "1"
 reqwest = { version = "0.11", optional = true, features = ["blocking"] }
+wlrs = "0.2.2"
 
 [target.'cfg(unix)'.dependencies]
 enquote = "1"
