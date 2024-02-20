@@ -15,8 +15,8 @@ The supported desktops are:
 - LXDE
 - MATE
 - Deepin
-- Most Wayland compositors (set only, requires swaybg)
-- i3 (set only, requires feh)
+- Most Wayland compositors (set only)
+- i3 (set only)
 
 ## Examples
 
