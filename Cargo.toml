@@ -11,24 +11,26 @@ categories = ["api-bindings"]
 license = "Unlicense"
 
 [dependencies]
-dirs = { version = "6", optional = true }
-thiserror = "2"
-reqwest = { version = "0.12", optional = true, features = ["blocking"] }
+dirs = { version = "6.0.0", optional = true }
+thiserror = "2.0.18"
+reqwest = { version = "0.13.2", optional = true, features = ["blocking"] }
 
 [target.'cfg(unix)'.dependencies]
-enquote = "1"
+enquote = "1.1.0"
 
 [target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
-rust-ini = "0.21"
-dirs = "6"
+rust-ini = "0.21.3"
+dirs = "6.0.0"
 
 [target.'cfg(windows)'.dependencies]
-windows-sys = { version = "0.60", features = ["Win32_UI_WindowsAndMessaging"] }
-winreg = "0.55"
+windows-sys = { version = "0.61.2", features = [
+    "Win32_UI_WindowsAndMessaging",
+] }
+winreg = "0.56.0"
 
 [dev-dependencies]
-rand = "0.9"
-clap = { version = "4", features = ["derive"] }
+rand = "0.10.1"
+clap = { version = "4.6.1", features = ["derive"] }
 
 [features]
 from_url = ["dirs", "reqwest"]
