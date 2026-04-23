@@ -1,17 +1,15 @@
 use crate::{Mode, Result};
+use ::core::ffi::c_void;
 use std::ffi::OsStr;
 use std::io;
 use std::iter;
 use std::mem;
 use std::os::windows::ffi::OsStrExt;
-use winapi::ctypes::c_void;
-use winapi::um::winuser::SystemParametersInfoW;
-use winapi::um::winuser::SPIF_SENDCHANGE;
-use winapi::um::winuser::SPIF_UPDATEINIFILE;
-use winapi::um::winuser::SPI_GETDESKWALLPAPER;
-use winapi::um::winuser::SPI_SETDESKWALLPAPER;
-use winreg::enums::*;
-use winreg::RegKey;
+use windows_sys::Win32::UI::WindowsAndMessaging::{
+    SPI_GETDESKWALLPAPER, SPI_SETDESKWALLPAPER, SPIF_SENDCHANGE, SPIF_UPDATEINIFILE,
+    SystemParametersInfoW,
+};
+use winreg::{RegKey, enums::*};
 
 #[cfg(feature = "from_url")]
 use crate::download_image;

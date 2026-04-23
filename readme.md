@@ -56,3 +56,12 @@ fn main() {
     println!("{:?}", wallpaper::get());
 }
 ```
+
+Here an example that sets random wallpapers from a specific folder, you can install it with
+```bash
+cargo install wallpaper --example random_wallpaper --features cron
+```
+Now you can run it with
+```bash
+random_wallpaper -p /your/wallpapers/folder
+```

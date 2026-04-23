@@ -1,5 +1,5 @@
 use super::parse_dconf;
-use crate::{run, Mode, Result};
+use crate::{Mode, Result, run};
 
 #[inline]
 pub fn is_compliant(desktop: &str) -> bool {
@@ -33,7 +33,7 @@ where
     )
     // Ignore the result because in Gnome < 42 the cmd could fail since
     // key "picture-uri-dark" does not exists
-    .or_else(|_| res)
+    .or(res)
 }
 
 pub fn set_mode(mode: Mode) -> Result<()> {
