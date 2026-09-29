@@ -20,8 +20,8 @@ pub fn get() -> Result<String> {
     match desktop.as_str() {
         "KDE" => kde::get(),
         "X-Cinnamon" => parse_dconf(
-            "dconf",
-            &["read", "/org/cinnamon/desktop/background/picture-uri"],
+            "gsettings",
+            &["get", "org.cinnamon.desktop.background", "picture-uri"],
         ),
         "MATE" => parse_dconf(
             "dconf",
@@ -54,10 +54,11 @@ where
     match desktop.as_str() {
         "KDE" => kde::set(&path),
         "X-Cinnamon" => run(
-            "dconf",
+            "gsettings",
             &[
-                "write",
-                "/org/cinnamon/desktop/background/picture-uri",
+                "set",
+                "org.cinnamon.desktop.background",
+                "picture-uri",
                 &enquote::enquote('"', &format!("file://{}", &path)),
             ],
         ),
@@ -118,10 +119,11 @@ pub fn set_mode(mode: Mode) -> Result<()> {
     match desktop.as_str() {
         "KDE" => kde::set_mode(mode),
         "X-Cinnamon" => run(
-            "dconf",
+            "gsettings",
             &[
-                "write",
-                "/org/cinnamon/desktop/background/picture-options",
+                "set",
+                "org.cinnamon.desktop.background",
+                "picture-options",
                 &mode.get_gnome_string(),
             ],
         ),

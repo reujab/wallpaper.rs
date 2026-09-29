@@ -16,11 +16,11 @@
 //! * i3 (set only, requires feh)
 //!
 //! # Example
-//! ```
-//!println!("{:?}", wallpaper::get());
-//!wallpaper::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
-//!wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
-//!println!("{:?}", wallpaper::get());
+//! ```no_run
+//!println!("{:?}", wallpaper_ng::get());
+//!wallpaper_ng::set_from_path("/usr/share/backgrounds/gnome/adwaita-day.png").unwrap();
+//!wallpaper_ng::set_mode(wallpaper_ng::Mode::Crop).unwrap();
+//!println!("{:?}", wallpaper_ng::get());
 //! ```
 
 mod error;

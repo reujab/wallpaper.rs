@@ -1,4 +1,5 @@
-use crate::{get_stdout, run, Mode, Result};
+use crate::{get_stdout, run, Error, Mode, Result};
+use std::path::Path;
 
 #[cfg(feature = "from_url")]
 use crate::download_image;
@@ -25,7 +26,7 @@ where
             "-e",
             &format!(
                 r#"tell application "System Events" to tell every desktop to set picture to {}"#,
-                enquote::enquote('"', path),
+                enquote::enquote('"', path.as_ref().to_str().ok_or(Error::InvalidPath)?),
             ),
         ],
     )
@@ -40,5 +41,5 @@ pub fn set_from_url(url: &str) -> Result<()> {
 
 /// No-op. Unable to change with AppleScript.
 pub fn set_mode(_: Mode) -> Result<()> {
-    Err("unsupported on macos".into())
+    Err(Error::UnsupportedDesktop)
 }

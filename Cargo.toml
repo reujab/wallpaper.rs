@@ -1,30 +1,30 @@
 [package]
-name = "wallpaper"
-version = "4.0.0"
+name = "wallpaper-ng"
+version = "0.1.2"
 edition = "2018"
-authors = ["reujab <reujab@gmail.com>"]
+authors = ["David Población Criado <davidpblcrd@protonmail.com>", "reujab <reujab@gmail.com>"]
 description = "Gets and sets the desktop wallpaper/background."
-repository = "https://github.com/reujab/wallpaper.rs"
+repository = "https://github.com/davidpob99/wallpaper-ng"
 readme = "readme.md"
 keywords = ["desktop", "wallpaper", "background"]
 categories = ["api-bindings"]
-license = "Unlicense"
+license = "Apache-2.0"
 
 [dependencies]
-dirs = { version = "1", optional = true }
-thiserror = "1"
-reqwest = { version = "0.11", optional = true, features = ["blocking"] }
+dirs = { version = "6", optional = true }
+thiserror = "2"
+reqwest = { version = "0.13", optional = true, default-features = false, features = ["blocking", "rustls"] }
 
 [target.'cfg(unix)'.dependencies]
 enquote = "1"
 
 [target.'cfg(all(unix, not(target_os = "macos")))'.dependencies]
-rust-ini = "0.12"
-dirs = "1"
+rust-ini = "0.21"
+dirs = "6"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["winuser"] }
-winreg = "0.9"
+winreg = "0.56"
 
 [features]
 from_url = ["dirs", "reqwest"]
